@@ -1,0 +1,14 @@
+# Vercel project link (local only)
+.vercel
+
+# Dependencies / build
+node_modules/
+_build/
+
+# Logs
+*.log
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
