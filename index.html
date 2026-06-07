@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="auto-deploy-verify-001" />
+<meta name="x-build" content="bilingual-v2" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -15,15 +15,16 @@
       <div class="brand">
         <img src="assets/logo-white.svg" alt="Ministry of Tourism" class="brand-logo" />
         <span class="brand-divider"></span>
-        <span class="brand-title">Procurement Governance Platform</span>
+        <span class="brand-title" data-i18n="brand.title">Procurement Governance Platform</span>
       </div>
       <div class="topbar-right">
-        <span class="badge-ai">AI&nbsp;Powered</span>
+        <button id="langToggle" class="lang-toggle" aria-label="Switch language">العربية</button>
+        <span class="badge-ai" data-i18n="brand.ai">AI&nbsp;Powered</span>
         <div class="user">
           <div class="avatar">SA</div>
           <div class="user-meta">
-            <span class="user-name">Procurement Specialist</span>
-            <span class="user-role">Governance &amp; Tendering</span>
+            <span class="user-name" data-i18n="user.name">Procurement Specialist</span>
+            <span class="user-role" data-i18n="user.role">Governance &amp; Tendering</span>
           </div>
         </div>
       </div>
@@ -32,11 +33,11 @@
 
   <!-- Stepper -->
   <nav class="stepper" id="stepper">
-    <button class="step is-active" data-view="upload"><span class="step-no">1</span> Upload</button>
-    <button class="step" data-view="analysis"><span class="step-no">2</span> Analysis</button>
-    <button class="step" data-view="findings"><span class="step-no">3</span> Recommendations</button>
-    <button class="step" data-view="improve"><span class="step-no">4</span> Improved Document</button>
-    <button class="step" data-view="report"><span class="step-no">5</span> Executive Report</button>
+    <button class="step is-active" data-view="upload"><span class="step-no">1</span> <span data-i18n="step.upload">Upload</span></button>
+    <button class="step" data-view="analysis"><span class="step-no">2</span> <span data-i18n="step.analysis">Analysis</span></button>
+    <button class="step" data-view="findings"><span class="step-no">3</span> <span data-i18n="step.findings">Recommendations</span></button>
+    <button class="step" data-view="improve"><span class="step-no">4</span> <span data-i18n="step.improve">Improved Document</span></button>
+    <button class="step" data-view="report"><span class="step-no">5</span> <span data-i18n="step.report">Executive Report</span></button>
   </nav>
 
   <main class="container">
@@ -44,8 +45,8 @@
     <!-- ===================== UPLOAD ===================== -->
     <section class="view is-active" id="view-upload">
       <div class="hero">
-        <h1>Review and improve procurement documents <span class="accent">before they go to tender.</span></h1>
-        <p class="lead">Upload an RFP, Statement of Work or technical specification. The platform analyses it against good-practice standards and the Ministry's historical procurement knowledge, flags quality and governance gaps, and produces a higher-quality, tender-ready version.</p>
+        <h1 data-i18n-html="hero.h1">Review and improve procurement documents <span class="accent">before they go to tender.</span></h1>
+        <p class="lead" data-i18n="hero.lead">Upload an RFP, Statement of Work or technical specification. The platform analyses it against good-practice standards and the Ministry's historical procurement knowledge, flags quality and governance gaps, and produces a higher-quality, tender-ready version.</p>
       </div>
 
       <div class="upload-grid">
@@ -54,31 +55,31 @@
             <div class="dz-icon">
               <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>
             </div>
-            <p class="dz-title">Drag &amp; drop a document here</p>
-            <p class="dz-sub">or <button class="linklike" id="browseBtn">browse your files</button> &nbsp;·&nbsp; PDF, DOCX up to 25&nbsp;MB</p>
+            <p class="dz-title" data-i18n="dz.title">Drag &amp; drop a document here</p>
+            <p class="dz-sub"><span data-i18n="dz.or">or </span><button class="linklike" id="browseBtn" data-i18n="dz.browse">browse your files</button><span data-i18n="dz.formats"> &nbsp;·&nbsp; PDF, DOCX up to 25&nbsp;MB</span></p>
             <input type="file" id="fileInput" hidden />
           </div>
 
           <div class="types">
-            <span class="types-label">Supported document types</span>
+            <span class="types-label" data-i18n="types.label">Supported document types</span>
             <div class="chips">
-              <span class="chip">RFP</span>
-              <span class="chip">Statement of Work</span>
-              <span class="chip">Technical Specification</span>
-              <span class="chip">Framework Agreement</span>
-              <span class="chip">Service Scope</span>
-              <span class="chip">Managed Services</span>
-              <span class="chip">Technology Procurement</span>
+              <span class="chip" data-i18n="chip.rfp">RFP</span>
+              <span class="chip" data-i18n="chip.sow">Statement of Work</span>
+              <span class="chip" data-i18n="chip.spec">Technical Specification</span>
+              <span class="chip" data-i18n="chip.framework">Framework Agreement</span>
+              <span class="chip" data-i18n="chip.scope">Service Scope</span>
+              <span class="chip" data-i18n="chip.managed">Managed Services</span>
+              <span class="chip" data-i18n="chip.tech">Technology Procurement</span>
             </div>
           </div>
         </div>
 
         <aside class="samples">
-          <h3>Try a sample document</h3>
-          <p class="muted">No upload needed — load a representative document to see the platform in action.</p>
-          <button class="sample" data-sample="it"><span class="sample-doc">RFP</span><span><strong>Managed IT Services RFP</strong><em>42 pages · 18 scope items</em></span></button>
-          <button class="sample" data-sample="cyber"><span class="sample-doc">SOW</span><span><strong>Cybersecurity Operations SOW</strong><em>27 pages · 12 scope items</em></span></button>
-          <button class="sample" data-sample="cloud"><span class="sample-doc">SPEC</span><span><strong>Cloud Platform Technical Spec</strong><em>35 pages · 21 scope items</em></span></button>
+          <h3 data-i18n="samples.title">Try a sample document</h3>
+          <p class="muted" data-i18n="samples.sub">No upload needed — load a representative document to see the platform in action.</p>
+          <button class="sample" data-sample="it"><span class="sample-doc">RFP</span><span><strong data-sname></strong><em data-smeta></em></span></button>
+          <button class="sample" data-sample="cyber"><span class="sample-doc">SOW</span><span><strong data-sname></strong><em data-smeta></em></span></button>
+          <button class="sample" data-sample="cloud"><span class="sample-doc">SPEC</span><span><strong data-sname></strong><em data-smeta></em></span></button>
         </aside>
       </div>
     </section>
@@ -87,14 +88,14 @@
     <section class="view" id="view-analysing">
       <div class="analysing">
         <div class="spinner"></div>
-        <h2 id="analysingDoc">Analysing document…</h2>
+        <h2 id="analysingDoc" data-i18n="an.analysing">Analysing document…</h2>
         <ul class="analysing-steps" id="analysingSteps">
-          <li data-step="parse">Reading and structuring the document</li>
-          <li data-step="dup">Detecting duplicated and overlapping scope</li>
-          <li data-step="req">Assessing requirement strength and clarity</li>
-          <li data-step="gap">Checking deliverables, KPIs, SLAs &amp; acceptance criteria</li>
-          <li data-step="gov">Evaluating governance and cost optimisation</li>
-          <li data-step="gen">Generating recommendations &amp; improved version</li>
+          <li data-step="parse" data-i18n="an.parse">Reading and structuring the document</li>
+          <li data-step="dup" data-i18n="an.dup">Detecting duplicated and overlapping scope</li>
+          <li data-step="req" data-i18n="an.req">Assessing requirement strength and clarity</li>
+          <li data-step="gap" data-i18n="an.gap">Checking deliverables, KPIs, SLAs &amp; acceptance criteria</li>
+          <li data-step="gov" data-i18n="an.gov">Evaluating governance and cost optimisation</li>
+          <li data-step="gen" data-i18n="an.gen">Generating recommendations &amp; improved version</li>
         </ul>
       </div>
     </section>
@@ -103,10 +104,10 @@
     <section class="view" id="view-analysis">
       <div class="view-head">
         <div>
-          <h2>Analysis summary</h2>
+          <h2 data-i18n="an.summary">Analysis summary</h2>
           <p class="muted" id="analysisDocName">Managed IT Services RFP</p>
         </div>
-        <button class="btn btn-primary" data-goto="findings">View recommendations →</button>
+        <button class="btn btn-primary" data-goto="findings" data-i18n="btn.viewrec">View recommendations →</button>
       </div>
 
       <div class="score-row">
@@ -120,19 +121,19 @@
           </div>
           <div class="score-text">
             <span class="score-tag" id="scoreTag">Needs improvement</span>
-            <p class="muted">Overall document quality before improvement. Reflects clarity, completeness, measurability and governance.</p>
+            <p class="muted" data-i18n="score.desc">Overall document quality before improvement. Reflects clarity, completeness, measurability and governance.</p>
           </div>
         </div>
 
         <div class="stat-grid">
-          <div class="stat"><span class="stat-num" data-count="34">0</span><span class="stat-lbl">Issues found</span></div>
-          <div class="stat"><span class="stat-num" data-count="6">0</span><span class="stat-lbl">Duplicated scope items</span></div>
-          <div class="stat"><span class="stat-num" data-count="11">0</span><span class="stat-lbl">Missing elements</span></div>
-          <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-lbl">Cost opportunities</span></div>
+          <div class="stat"><span class="stat-num" data-count="34">0</span><span class="stat-lbl" data-i18n="stat.issues">Issues found</span></div>
+          <div class="stat"><span class="stat-num" data-count="6">0</span><span class="stat-lbl" data-i18n="stat.dup">Duplicated scope items</span></div>
+          <div class="stat"><span class="stat-num" data-count="11">0</span><span class="stat-lbl" data-i18n="stat.missing">Missing elements</span></div>
+          <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-lbl" data-i18n="stat.cost">Cost opportunities</span></div>
         </div>
       </div>
 
-      <h3 class="section-title">Findings by category</h3>
+      <h3 class="section-title" data-i18n="cat.section">Findings by category</h3>
       <div class="cat-grid" id="catGrid"><!-- injected --></div>
     </section>
 
@@ -140,17 +141,17 @@
     <section class="view" id="view-findings">
       <div class="view-head">
         <div>
-          <h2>Recommendations</h2>
-          <p class="muted">Prioritised findings with recommended actions. Every change is explained and reversible.</p>
+          <h2 data-i18n="fnd.title">Recommendations</h2>
+          <p class="muted" data-i18n="fnd.sub">Prioritised findings with recommended actions. Every change is explained and reversible.</p>
         </div>
-        <button class="btn btn-primary" data-goto="improve">See improved document →</button>
+        <button class="btn btn-primary" data-goto="improve" data-i18n="btn.seeimproved">See improved document →</button>
       </div>
 
       <div class="filters" id="filters">
-        <button class="filter is-active" data-sev="all">All</button>
-        <button class="filter" data-sev="high">High</button>
-        <button class="filter" data-sev="medium">Medium</button>
-        <button class="filter" data-sev="low">Low</button>
+        <button class="filter is-active" data-sev="all" data-i18n="flt.all">All</button>
+        <button class="filter" data-sev="high" data-i18n="flt.high">High</button>
+        <button class="filter" data-sev="medium" data-i18n="flt.medium">Medium</button>
+        <button class="filter" data-sev="low" data-i18n="flt.low">Low</button>
       </div>
 
       <div class="findings" id="findings"><!-- injected --></div>
@@ -160,10 +161,10 @@
     <section class="view" id="view-improve">
       <div class="view-head">
         <div>
-          <h2>Improved document</h2>
-          <p class="muted">Weak content rewritten, measurable outcomes added, missing elements supplied.</p>
+          <h2 data-i18n="imp.title">Improved document</h2>
+          <p class="muted" data-i18n="imp.sub">Weak content rewritten, measurable outcomes added, missing elements supplied.</p>
         </div>
-        <button class="btn btn-primary" id="downloadBtn">Download improved version</button>
+        <button class="btn btn-primary" id="downloadBtn" data-i18n="btn.download">Download improved version</button>
       </div>
 
       <div class="diff" id="diff"><!-- injected --></div>
@@ -173,42 +174,42 @@
     <section class="view" id="view-report">
       <div class="view-head">
         <div>
-          <h2>Executive report</h2>
+          <h2 data-i18n="rpt.title">Executive report</h2>
           <p class="muted" id="reportDocName">Managed IT Services RFP</p>
         </div>
-        <button class="btn btn-ghost" id="restartBtn">Review another document</button>
+        <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.review">Review another document</button>
       </div>
 
       <div class="report-cards">
         <div class="rcard">
-          <span class="rcard-lbl">Quality uplift</span>
+          <span class="rcard-lbl" data-i18n="rc.uplift">Quality uplift</span>
           <span class="rcard-num"><span id="upFrom">58</span> <span class="arrow">→</span> <span class="up" id="upTo">86</span></span>
-          <span class="rcard-sub">out of 100</span>
+          <span class="rcard-sub" data-i18n="rc.outof">out of 100</span>
         </div>
         <div class="rcard">
-          <span class="rcard-lbl">Issues resolved</span>
+          <span class="rcard-lbl" data-i18n="rc.resolved">Issues resolved</span>
           <span class="rcard-num up">31<span class="rcard-den"> / 34</span></span>
-          <span class="rcard-sub">91% addressed automatically</span>
+          <span class="rcard-sub" data-i18n="rc.resolvedsub">91% addressed automatically</span>
         </div>
         <div class="rcard">
-          <span class="rcard-lbl">Est. cost optimisation</span>
+          <span class="rcard-lbl" data-i18n="rc.cost">Est. cost optimisation</span>
           <span class="rcard-num up">5</span>
-          <span class="rcard-sub">opportunities flagged for review</span>
+          <span class="rcard-sub" data-i18n="rc.costsub">opportunities flagged for review</span>
         </div>
         <div class="rcard">
-          <span class="rcard-lbl">Governance coverage</span>
+          <span class="rcard-lbl" data-i18n="rc.gov">Governance coverage</span>
           <span class="rcard-num up">100%</span>
-          <span class="rcard-sub">KPIs, SLAs &amp; acceptance criteria present</span>
+          <span class="rcard-sub" data-i18n="rc.govsub">KPIs, SLAs &amp; acceptance criteria present</span>
         </div>
       </div>
 
       <div class="report-body">
-        <h3>Summary for leadership</h3>
-        <p>The submitted document was assessed as <strong>needs improvement</strong> prior to tendering, with 34 issues identified across scope quality, requirement strength, performance measures and governance. The platform detected 6 duplicated scope items and overlap with two previous procurements, 9 weak or vague requirements, and 11 missing elements — including absent KPIs, SLAs and acceptance criteria that would have made supplier performance difficult to enforce.</p>
-        <p>An improved, tender-ready version was generated automatically: weak scope items and requirements were rewritten, measurable outcomes and governance provisions were added, and missing content was supplied. The document's quality score rose from <strong>58</strong> to <strong>86</strong>, with 91% of issues resolved without manual rework, while five cost-optimisation opportunities were flagged for specialist review. Each change is fully traceable, and the specialist retains final control over the document released to the market.</p>
+        <h3 data-i18n="rpt.summaryTitle">Summary for leadership</h3>
+        <p data-i18n-html="rpt.p1">The submitted document was assessed as <strong>needs improvement</strong> prior to tendering, with 34 issues identified across scope quality, requirement strength, performance measures and governance. The platform detected 6 duplicated scope items and overlap with two previous procurements, 9 weak or vague requirements, and 11 missing elements — including absent KPIs, SLAs and acceptance criteria that would have made supplier performance difficult to enforce.</p>
+        <p data-i18n-html="rpt.p2">An improved, tender-ready version was generated automatically: weak scope items and requirements were rewritten, measurable outcomes and governance provisions were added, and missing content was supplied. The document's quality score rose from <strong>58</strong> to <strong>86</strong>, with 91% of issues resolved without manual rework, while five cost-optimisation opportunities were flagged for specialist review. Each change is fully traceable, and the specialist retains final control over the document released to the market.</p>
         <div class="report-actions">
-          <button class="btn btn-primary" id="exportReport">Export report (PDF)</button>
-          <button class="btn btn-ghost" data-goto="analysis">Back to analysis</button>
+          <button class="btn btn-primary" id="exportReport" data-i18n="btn.export">Export report (PDF)</button>
+          <button class="btn btn-ghost" data-goto="analysis" data-i18n="btn.backanalysis">Back to analysis</button>
         </div>
       </div>
     </section>
@@ -216,8 +217,8 @@
   </main>
 
   <footer class="footer">
-    <span>Ministry of Tourism · Procurement Governance Platform</span>
-    <span class="muted">Prototype · Demonstration data · Confidential</span>
+    <span data-i18n="ft.left">Ministry of Tourism · Procurement Governance Platform</span>
+    <span class="muted" data-i18n="ft.right">Prototype · Demonstration data · Confidential</span>
   </footer>
 
   <div class="toast" id="toast"></div>
