@@ -11,16 +11,31 @@
       "user.role": "Governance & Tendering",
       "step.upload": "Upload", "step.analysis": "Analysis", "step.findings": "Recommendations",
       "step.improve": "Improved Document", "step.report": "Executive Report",
+      "step.upload.d": "Add your document", "step.analysis.d": "AI reviews quality & gaps",
+      "step.findings.d": "Prioritised fixes", "step.improve.d": "Enhanced version",
+      "step.report.d": "Summary for leadership",
+      "up.eyebrow": "Step 1 of 5",
       "hero.h1": "Review and improve procurement documents <span class=\"accent\">before they go to tender.</span>",
-      "hero.lead": "Upload an RFP, Statement of Work or technical specification. The platform analyses it against good-practice standards and the Ministry's historical procurement knowledge, flags quality and governance gaps, and produces a higher-quality, tender-ready version.",
-      "dz.title": "Drag & drop a document here",
-      "dz.or": "or ", "dz.browse": "browse your files", "dz.formats": " · PDF, DOCX up to 25 MB",
-      "types.label": "Supported document types",
+      "hero.lead": "Upload an RFP, Statement of Work or technical specification. The platform analyses it, flags quality and governance gaps, and produces a higher-quality, tender-ready version.",
+      "up.title": "Upload your procurement document",
+      "up.drag": "Drag & drop your file here, or",
+      "dz.browse": "browse files",
+      "up.fmt": "PDF or DOCX", "up.size": "Up to 25 MB", "up.secure": "Secure & confidential",
+      "state.uploading": "Uploading…", "state.success": "Uploaded successfully",
+      "state.continue": "Starting analysis…",
+      "state.error.title": "We couldn't read that file",
+      "state.error.msg": "Please upload a PDF or DOCX up to 25 MB.",
+      "btn.tryagain": "Try again",
+      "after.analyse": "The AI analyses your document",
+      "after.recommend": "You get prioritised recommendations",
+      "after.improve": "An improved, tender-ready version is produced",
+      "type.q": "What type of document is this?", "type.opt": "(optional)",
       "chip.rfp": "RFP", "chip.sow": "Statement of Work", "chip.spec": "Technical Specification",
       "chip.framework": "Framework Agreement", "chip.scope": "Service Scope",
       "chip.managed": "Managed Services", "chip.tech": "Technology Procurement",
-      "samples.title": "Try a sample document",
+      "samples.title": "Or start from a sample document",
       "samples.sub": "No upload needed — load a representative document to see the platform in action.",
+      "sample.use": "Use this →",
       "an.analysing": "Analysing document…",
       "an.prefix": "Analysing: ",
       "an.parse": "Reading and structuring the document",
@@ -63,6 +78,8 @@
       "toast.first": "Upload or load a document first",
       "toast.download": "Improved document prepared (prototype)",
       "toast.export": "Executive report exported (prototype)",
+      "st.uploaded": "Document uploaded. Starting analysis.",
+      "st.error": "Unsupported file. Please use a PDF or DOCX up to 25 MB.",
       "langName": "العربية"
     },
     ar: {
@@ -72,16 +89,31 @@
       "user.role": "الحوكمة والمنافسات",
       "step.upload": "رفع المستند", "step.analysis": "التحليل", "step.findings": "التوصيات",
       "step.improve": "المستند المُحسّن", "step.report": "التقرير التنفيذي",
+      "step.upload.d": "أضف مستندك", "step.analysis.d": "فحص الجودة والفجوات",
+      "step.findings.d": "إصلاحات حسب الأولوية", "step.improve.d": "النسخة المُحسّنة",
+      "step.report.d": "ملخص للقيادة",
+      "up.eyebrow": "الخطوة 1 من 5",
       "hero.h1": "راجع وحسّن مستندات المشتريات <span class=\"accent\">قبل طرحها في المنافسة.</span>",
-      "hero.lead": "ارفع كراسة شروط أو نطاق عمل أو مواصفات فنية. تحلّلها المنصة وفق أفضل الممارسات ومعرفة الوزارة التراكمية في المشتريات، وترصد فجوات الجودة والحوكمة، وتنتج نسخة أعلى جودة وجاهزة للطرح.",
-      "dz.title": "اسحب وأفلت المستند هنا",
-      "dz.or": "أو ", "dz.browse": "تصفّح ملفاتك", "dz.formats": " · ملفات PDF أو DOCX حتى 25 ميجابايت",
-      "types.label": "أنواع المستندات المدعومة",
+      "hero.lead": "ارفع كراسة شروط أو نطاق عمل أو مواصفات فنية. تحلّلها المنصة وترصد فجوات الجودة والحوكمة، وتنتج نسخة أعلى جودة وجاهزة للطرح.",
+      "up.title": "ارفع مستند المشتريات",
+      "up.drag": "اسحب وأفلت ملفك هنا، أو",
+      "dz.browse": "تصفّح الملفات",
+      "up.fmt": "PDF أو DOCX", "up.size": "حتى 25 ميجابايت", "up.secure": "آمن وسري",
+      "state.uploading": "جارٍ الرفع…", "state.success": "تم الرفع بنجاح",
+      "state.continue": "جارٍ بدء التحليل…",
+      "state.error.title": "تعذّرت قراءة هذا الملف",
+      "state.error.msg": "يرجى رفع ملف PDF أو DOCX بحجم لا يتجاوز 25 ميجابايت.",
+      "btn.tryagain": "حاول مرة أخرى",
+      "after.analyse": "يحلّل الذكاء الاصطناعي مستندك",
+      "after.recommend": "تحصل على توصيات مرتبة حسب الأولوية",
+      "after.improve": "تُنتَج نسخة مُحسّنة جاهزة للطرح",
+      "type.q": "ما نوع هذا المستند؟", "type.opt": "(اختياري)",
       "chip.rfp": "كراسة الشروط (RFP)", "chip.sow": "نطاق العمل", "chip.spec": "المواصفات الفنية",
       "chip.framework": "اتفاقية إطارية", "chip.scope": "نطاق الخدمة",
       "chip.managed": "الخدمات المُدارة", "chip.tech": "المشتريات التقنية",
-      "samples.title": "جرّب مستندًا نموذجيًا",
+      "samples.title": "أو ابدأ بمستند نموذجي",
       "samples.sub": "بدون رفع — حمّل مستندًا تمثيليًا لرؤية المنصة أثناء العمل.",
+      "sample.use": "استخدم هذا ←",
       "an.analysing": "جارٍ تحليل المستند…",
       "an.prefix": "جارٍ التحليل: ",
       "an.parse": "قراءة المستند وهيكلته",
@@ -124,6 +156,8 @@
       "toast.first": "يرجى رفع أو تحميل مستند أولًا",
       "toast.download": "تم تجهيز المستند المُحسّن (نموذج أولي)",
       "toast.export": "تم تصدير التقرير التنفيذي (نموذج أولي)",
+      "st.uploaded": "تم رفع المستند. جارٍ بدء التحليل.",
+      "st.error": "ملف غير مدعوم. استخدم PDF أو DOCX حتى 25 ميجابايت.",
       "langName": "English"
     }
   };
@@ -132,12 +166,15 @@
   const SAMPLES = {
     it:    { score: 58, from: 58, to: 86,
              name: { en: "Managed IT Services RFP", ar: "كراسة شروط خدمات تقنية المعلومات المُدارة" },
+             desc: { en: "Standard RFP for outsourced, managed IT operations.", ar: "كراسة شروط نموذجية لعمليات تقنية معلومات مُدارة ومُسندة." },
              meta: { en: "42 pages · 18 scope items", ar: "42 صفحة · 18 بند نطاق" } },
     cyber: { score: 61, from: 61, to: 88,
              name: { en: "Cybersecurity Operations SOW", ar: "نطاق عمل عمليات الأمن السيبراني" },
+             desc: { en: "Scope of work for a security operations centre (SOC).", ar: "نطاق عمل لمركز عمليات أمن سيبراني (SOC)." },
              meta: { en: "27 pages · 12 scope items", ar: "27 صفحة · 12 بند نطاق" } },
     cloud: { score: 54, from: 54, to: 84,
              name: { en: "Cloud Platform Technical Spec", ar: "المواصفات الفنية لمنصة سحابية" },
+             desc: { en: "Technical specification for a cloud hosting platform.", ar: "مواصفات فنية لمنصة استضافة سحابية." },
              meta: { en: "35 pages · 21 scope items", ar: "35 صفحة · 21 بند نطاق" } }
   };
 
@@ -153,8 +190,7 @@
     { sev: "high", ico: "⏱", name: { en: "Missing SLAs", ar: "اتفاقيات مستوى خدمة مفقودة" } },
     { sev: "medium", ico: "✓", name: { en: "Missing acceptance criteria", ar: "معايير قبول مفقودة" } },
     { sev: "medium", ico: "⚖", name: { en: "Governance gaps", ar: "فجوات حوكمة" } },
-    { sev: "low", ico: "₵", name: { en: "Cost optimisation", ar: "تحسين التكلفة" } },
-    // counts (parallel)
+    { sev: "low", ico: "₵", name: { en: "Cost optimisation", ar: "تحسين التكلفة" } }
   ];
   const CAT_COUNTS = [6, 2, 5, 4, 3, 3, 2, 3, 2, 1, 3, 5];
 
@@ -254,11 +290,12 @@
   const steps = $$(".step");
   const views = { upload:"view-upload", analysing:"view-analysing", analysis:"view-analysis",
                   findings:"view-findings", improve:"view-improve", report:"view-report" };
-  let current = "upload";
   let analysed = false;
   let activeSample = SAMPLES.it;
   let currentFilter = "all";
   let currentScore = 58;
+
+  const dz = $("#dropzone");
 
   /* ---------------- language ---------------- */
   function applyLang(next) {
@@ -271,22 +308,20 @@
     $$("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
     $$("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.getAttribute("data-i18n-html")); });
 
-    // sample buttons
-    $$(".sample").forEach(b => {
+    // sample cards
+    $$(".scard").forEach(b => {
       const s = SAMPLES[b.dataset.sample];
       $("[data-sname]", b).textContent = s.name[lang];
+      $("[data-sdesc]", b).textContent = s.desc[lang];
       $("[data-smeta]", b).textContent = s.meta[lang];
     });
 
-    // language toggle label shows the OTHER language
     $("#langToggle").textContent = t("langName");
 
-    // dynamic doc names + tag
     $("#analysisDocName").textContent = activeSample.name[lang];
     $("#reportDocName").textContent = activeSample.name[lang];
     updateScoreTag(currentScore);
 
-    // rebuild dynamic lists if present
     buildCategories();
     if (analysed) { buildFindings(currentFilter); buildDiff(); }
   }
@@ -302,21 +337,56 @@
     const idx = order.indexOf(stepKey);
     steps.forEach(s => {
       const si = order.indexOf(s.dataset.view);
-      s.classList.toggle("is-active", s.dataset.view === stepKey);
+      const active = s.dataset.view === stepKey;
+      s.classList.toggle("is-active", active);
       s.classList.toggle("is-done", idx > -1 && si > -1 && si < idx);
+      if (active) s.setAttribute("aria-current", "step"); else s.removeAttribute("aria-current");
     });
     if (!opts.noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
-    current = key;
   }
 
   function toast(msg) {
     const el = $("#toast"); el.textContent = msg; el.classList.add("show");
     clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("show"), 2600);
   }
+  function announce(msg) { const s = $("#dzStatus"); if (s) s.textContent = msg; }
+
+  /* ---------------- upload state machine ---------------- */
+  function setDzState(state) { dz.dataset.state = state; }
+
+  function validFile(file) {
+    if (!file) return false;
+    const name = (file.name || "").toLowerCase();
+    const okExt = name.endsWith(".pdf") || name.endsWith(".docx");
+    const okSize = file.size <= 25 * 1024 * 1024;
+    return okExt && okSize;
+  }
+
+  function handleFile(file) {
+    if (!validFile(file)) { setDzState("error"); announce(t("st.error")); return; }
+    $("#upFileName").textContent = file.name;
+    $("#okFileName").textContent = file.name;
+    setDzState("uploading");
+    const bar = $("#upBar"), pct = $("#upPct");
+    let p = 0;
+    const iv = setInterval(() => {
+      p = Math.min(100, p + Math.max(4, Math.round((100 - p) * 0.18)));
+      bar.style.width = p + "%"; pct.textContent = p;
+      if (p >= 100) {
+        clearInterval(iv);
+        setDzState("success"); announce(t("st.uploaded"));
+        setTimeout(() => {
+          startAnalysisDoc({
+            name: { en: file.name, ar: file.name },
+            score: 57, from: 57, to: 85
+          });
+        }, 950);
+      }
+    }, 120);
+  }
 
   /* ---------------- analysis ---------------- */
-  function startAnalysis(key) {
-    activeSample = SAMPLES[key];
+  function runAnalysing() {
     $("#analysingDoc").textContent = t("an.prefix") + activeSample.name[lang];
     const items = $$("#analysingSteps li");
     items.forEach(i => i.classList.remove("active","done"));
@@ -329,6 +399,8 @@
     };
     setTimeout(tick, 400);
   }
+  function startAnalysisSample(key) { activeSample = SAMPLES[key]; runAnalysing(); }
+  function startAnalysisDoc(obj) { activeSample = obj; runAnalysing(); }
 
   function finishAnalysis() {
     analysed = true;
@@ -445,23 +517,50 @@
     if (b.dataset.goto === "analysis") animateScores();
   }));
 
-  // upload (event delegation for browse so innerHTML swaps don't break it)
+  // upload interactions
+  const fileInput = $("#fileInput");
+  function openPicker() { if (dz.dataset.state === "idle") fileInput.click(); }
+  dz.addEventListener("click", e => {
+    if (e.target.closest("#browseBtn") || e.target.closest("#retryBtn")) return;
+    openPicker();
+  });
+  dz.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && dz.dataset.state === "idle") { e.preventDefault(); fileInput.click(); }
+  });
   document.addEventListener("click", e => {
-    if (e.target && e.target.id === "browseBtn") $("#fileInput").click();
+    if (e.target.closest("#browseBtn")) { e.preventDefault(); fileInput.click(); }
+    if (e.target.closest("#retryBtn")) { e.preventDefault(); setDzState("idle"); }
   });
-  $("#fileInput").addEventListener("change", e => {
-    if (e.target.files && e.target.files.length) startAnalysis("it");
+  fileInput.addEventListener("change", e => {
+    if (e.target.files && e.target.files.length) handleFile(e.target.files[0]);
+    e.target.value = "";
   });
-  const dz = $("#dropzone");
-  ["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add("drag"); }));
-  ["dragleave","drop"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("drag"); }));
-  dz.addEventListener("drop", () => startAnalysis("it"));
-  $$(".sample").forEach(b => b.addEventListener("click", () => startAnalysis(b.dataset.sample)));
+  ["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); if (dz.dataset.state === "idle") dz.classList.add("drag"); }));
+  ["dragleave","dragend"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("drag"); }));
+  dz.addEventListener("drop", e => {
+    e.preventDefault(); dz.classList.remove("drag");
+    const f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) handleFile(f);
+  });
+
+  // sample cards
+  $$(".scard").forEach(b => {
+    b.setAttribute("role", "button");
+    b.setAttribute("tabindex", "0");
+    b.addEventListener("click", () => startAnalysisSample(b.dataset.sample));
+    b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); startAnalysisSample(b.dataset.sample); } });
+  });
+
+  // document-type chips (single select, optional)
+  $$("#docChips .chip").forEach(c => c.addEventListener("click", () => {
+    const wasOn = c.getAttribute("aria-pressed") === "true";
+    $$("#docChips .chip").forEach(o => { o.classList.remove("is-selected"); o.setAttribute("aria-pressed","false"); });
+    if (!wasOn) { c.classList.add("is-selected"); c.setAttribute("aria-pressed","true"); }
+  }));
 
   $("#downloadBtn").addEventListener("click", () => toast(t("toast.download")));
   $("#exportReport").addEventListener("click", () => toast(t("toast.export")));
-  $("#restartBtn").addEventListener("click", () => { analysed = false; showView("upload"); });
-
+  $("#restartBtn").addEventListener("click", () => { analysed = false; setDzState("idle"); showView("upload"); });
   $$(".filter").forEach(f => f.addEventListener("click", () => setFilter(f.dataset.sev)));
 
   // init
