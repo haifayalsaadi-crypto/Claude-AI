@@ -15,6 +15,8 @@
       "step.findings.d": "Prioritised fixes", "step.improve.d": "Enhanced version",
       "step.report.d": "Summary for leadership",
       "up.eyebrow": "Step 1 of 5",
+      "eyebrow.analysis": "Step 2 of 5", "eyebrow.findings": "Step 3 of 5",
+      "eyebrow.improve": "Step 4 of 5", "eyebrow.report": "Step 5 of 5",
       "hero.h1": "Review and improve procurement documents <span class=\"accent\">before they go to tender.</span>",
       "hero.lead": "Upload an RFP, Statement of Work or technical specification. The platform analyses it, flags quality and governance gaps, and produces a higher-quality, tender-ready version.",
       "up.title": "Upload your procurement document",
@@ -93,6 +95,8 @@
       "step.findings.d": "إصلاحات حسب الأولوية", "step.improve.d": "النسخة المُحسّنة",
       "step.report.d": "ملخص للقيادة",
       "up.eyebrow": "الخطوة 1 من 5",
+      "eyebrow.analysis": "الخطوة 2 من 5", "eyebrow.findings": "الخطوة 3 من 5",
+      "eyebrow.improve": "الخطوة 4 من 5", "eyebrow.report": "الخطوة 5 من 5",
       "hero.h1": "راجع وحسّن مستندات المشتريات <span class=\"accent\">قبل طرحها في المنافسة.</span>",
       "hero.lead": "ارفع كراسة شروط أو نطاق عمل أو مواصفات فنية. تحلّلها المنصة وترصد فجوات الجودة والحوكمة، وتنتج نسخة أعلى جودة وجاهزة للطرح.",
       "up.title": "ارفع مستند المشتريات",
@@ -284,7 +288,7 @@
   /* ---------------- helpers ---------------- */
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
-  let lang = localStorage.getItem("mot_lang") || "en";
+  let lang = localStorage.getItem("mot_lang") || "ar";
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
   const steps = $$(".step");
@@ -324,6 +328,16 @@
 
     buildCategories();
     if (analysed) { buildFindings(currentFilter); buildDiff(); }
+    updateFilterCounts();
+  }
+
+  function updateFilterCounts() {
+    const counts = { all: FINDINGS.length, high: 0, medium: 0, low: 0 };
+    FINDINGS.forEach(f => { counts[f.sev]++; });
+    $$(".filter").forEach(b => {
+      const sev = b.dataset.sev;
+      b.textContent = t("flt." + sev) + " (" + counts[sev] + ")";
+    });
   }
 
   /* ---------------- view nav ---------------- */
