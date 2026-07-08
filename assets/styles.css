@@ -306,3 +306,27 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible,.upload-card:focus
 [dir="rtl"] .dz-file{word-break:normal}
 [dir="rtl"] .eyebrow{letter-spacing:0}
 [dir="rtl"] .section-title,[dir="rtl"] .scard-tag,[dir="rtl"] .sev-badge,[dir="rtl"] .rcard-lbl{letter-spacing:0}
+
+/* ---------- Admin: approved template modal ---------- */
+.admin-btn{background:rgba(255,255,255,.08)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,22,22,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;animation:fade .2s ease}
+.modal-overlay[hidden]{display:none}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:580px;max-height:88vh;overflow:auto;box-shadow:var(--shadow-lg)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.modal-head h2{font-size:18px}
+.modal-close{background:none;border:none;font-size:26px;line-height:1;color:var(--grey);cursor:pointer;padding:0 4px;border-radius:8px}
+.modal-close:hover{color:var(--dark-green)}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.modal-body .muted{font-size:13.5px;line-height:1.6}
+.tpl-status{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--dark-green)}
+.tpl-badge{font-size:12px}
+.tpl-badge.default{color:var(--grey)}
+.tpl-badge.custom{color:var(--mid-green)}
+.tpl-name{font-weight:600;color:var(--ink)}
+.tpl-actions{display:flex;gap:10px;flex-wrap:wrap}
+.tpl-msg{min-height:20px;font-size:13.5px;font-weight:700;color:var(--aqua);margin:0}
+.tpl-ph-label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--grey);margin-bottom:10px}
+.tpl-ph-list{display:flex;flex-wrap:wrap;gap:8px}
+.ph-chip{font-family:"Consolas","Courier New",monospace;font-size:12px;color:var(--dark-green);background:var(--soft-aqua);border:1px solid #cdeede;padding:5px 10px;border-radius:7px;direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] .tpl-ph-label{letter-spacing:0}
+button:disabled{opacity:.6;cursor:progress}

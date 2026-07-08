@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="redesign-v5" />
+<meta name="x-build" content="template-engine-v6" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -18,6 +18,7 @@
         <span class="brand-title" data-i18n="brand.title">Procurement Governance Platform</span>
       </div>
       <div class="topbar-right">
+        <button id="adminBtn" class="lang-toggle admin-btn" aria-haspopup="dialog" data-i18n="admin.open">⚙ Template</button>
         <button id="langToggle" class="lang-toggle" aria-label="Switch language">العربية</button>
         <span class="badge-ai" data-i18n="brand.ai">AI&nbsp;Powered</span>
         <div class="user">
@@ -330,7 +331,40 @@
     <span class="muted" data-i18n="ft.right">Prototype · Demonstration data · Confidential</span>
   </footer>
 
+  <!-- ===================== ADMIN: Approved Template ===================== -->
+  <div class="modal-overlay" id="adminModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+      <div class="modal-head">
+        <h2 id="adminTitle" data-i18n="admin.title">Approved Ministry template</h2>
+        <button class="modal-close" id="adminClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted" data-i18n="admin.intro">Upload one official Ministry Word template (.docx). It is stored and used for every generated document until replaced. Fixed formatting, branding, headers, footers and legal clauses are never modified.</p>
+        <div class="tpl-status" id="tplStatus">
+          <span class="tpl-badge" id="tplBadge">…</span>
+          <span id="tplName" class="tpl-name"></span>
+        </div>
+        <div class="tpl-actions">
+          <input type="file" id="tplInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden />
+          <button class="btn btn-primary" id="tplUploadBtn" data-i18n="admin.upload">Upload approved template</button>
+          <button class="btn btn-ghost" id="tplResetBtn" data-i18n="admin.reset">Restore default</button>
+        </div>
+        <p class="tpl-msg" id="tplMsg" role="status" aria-live="polite"></p>
+        <div class="tpl-ph">
+          <span class="tpl-ph-label" data-i18n="admin.detected">Detected placeholders</span>
+          <div class="tpl-ph-list" id="tplPhList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/pizzip@3.1.7/dist/pizzip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.47.2/docxtemplater.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="assets/template-engine.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>
