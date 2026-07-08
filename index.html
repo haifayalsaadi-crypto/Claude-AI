@@ -5,32 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="template-engine-v6" />
+<meta name="x-build" content="phase1-shell-v7" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="topbar-inner">
+  <!-- Enterprise header -->
+  <header class="ent-header">
+    <div class="eh-row eh-top">
       <div class="brand">
         <img src="assets/logo-white.svg" alt="Ministry of Tourism" class="brand-logo" />
         <span class="brand-divider"></span>
         <span class="brand-title" data-i18n="brand.title">Procurement Governance Platform</span>
       </div>
-      <div class="topbar-right">
+      <div class="eh-search">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="globalSearch" type="search" data-i18n-ph="hdr.search" placeholder="Ask the assistant or search specification books…" aria-label="Global AI search" />
+        <kbd>AI</kbd>
+      </div>
+      <div class="eh-actions">
+        <button id="notifBtn" class="icon-btn" aria-label="Notifications" data-i18n-title="hdr.notif">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="notif-dot">3</span>
+        </button>
         <button id="adminBtn" class="lang-toggle admin-btn" aria-haspopup="dialog" data-i18n="admin.open">⚙ Template</button>
         <button id="langToggle" class="lang-toggle" aria-label="Switch language">العربية</button>
-        <span class="badge-ai" data-i18n="brand.ai">AI&nbsp;Powered</span>
-        <div class="user">
-          <div class="avatar" aria-hidden="true">SA</div>
+        <div class="user" id="adminMenuBtn" role="button" tabindex="0" aria-haspopup="menu" data-i18n-title="hdr.admin">
+          <div class="avatar" aria-hidden="true">MS</div>
           <div class="user-meta">
             <span class="user-name" data-i18n="user.name">Procurement Specialist</span>
             <span class="user-role" data-i18n="user.role">Governance &amp; Tendering</span>
           </div>
+          <svg class="caret" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </div>
       </div>
     </div>
+    <div class="eh-row eh-status">
+      <div class="status-pills">
+        <span class="spill"><span class="spill-ico">✦</span><span class="spill-l" data-i18n="hdr.engine">AI Engine</span><b>GPT‑5.5</b></span>
+        <span class="spill"><span class="spill-ico">▤</span><span class="spill-l" data-i18n="hdr.library">Knowledge Library</span><b>126</b></span>
+        <span class="spill"><span class="spill-ico">▦</span><span class="spill-l" data-i18n="hdr.template">Approved Template</span><b>Specification Template V3</b></span>
+        <span class="spill"><span class="spill-ico ok">●</span><span class="spill-l" data-i18n="hdr.index">Library Index</span><b class="ok" data-i18n="hdr.ready">Ready</b></span>
+      </div>
+      <div class="status-actions">
+        <span class="work-status"><span class="ws-dot"></span><span data-i18n="hdr.work">Ready to work</span></span>
+        <button class="btn btn-primary btn-sm" data-cmd="new" data-i18n="cmd.new">New Specification</button>
+      </div>
+    </div>
   </header>
+
+  <!-- Enterprise command bar -->
+  <nav class="commandbar" aria-label="Quick actions">
+    <button class="cmd" data-cmd="new"><span class="cmd-ico">＋</span><span data-i18n="cmd.new">New Specification</span></button>
+    <button class="cmd" data-cmd="library"><span class="cmd-ico">▤</span><span data-i18n="cmd.library">Reference Library</span></button>
+    <button class="cmd" data-cmd="template"><span class="cmd-ico">▦</span><span data-i18n="cmd.template">Template Manager</span></button>
+    <button class="cmd" data-cmd="addbook"><span class="cmd-ico">＋</span><span data-i18n="cmd.addbook">Add Reference Book</span></button>
+    <button class="cmd" data-cmd="reindex"><span class="cmd-ico">↻</span><span data-i18n="cmd.reindex">Reindex Library</span></button>
+    <button class="cmd" data-cmd="reports"><span class="cmd-ico">▧</span><span data-i18n="cmd.reports">Reports</span></button>
+    <button class="cmd" data-cmd="settings"><span class="cmd-ico">⚙</span><span data-i18n="cmd.settings">Settings</span></button>
+  </nav>
 
   <!-- Stepper -->
   <div class="stepper-wrap">
@@ -62,6 +94,47 @@
 
     <!-- ===================== UPLOAD ===================== -->
     <section class="view is-active" id="view-upload">
+     <div class="workspace">
+
+      <!-- LEFT: Smart Reference Library -->
+      <aside class="ws-col ws-left" aria-label="Reference Library">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title" data-i18n="lib.title">Smart Reference Library</h2>
+            <span class="panel-count">126</span>
+          </div>
+          <div class="lib-search">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" data-i18n-ph="lib.search" placeholder="Search the library" aria-label="Search library" />
+          </div>
+          <span class="lib-sub" data-i18n="lib.categories">Categories</span>
+          <ul class="cat-list">
+            <li data-cmd="library"><span data-i18n="rcat.cyber">Cybersecurity</span><b>34</b></li>
+            <li data-cmd="library"><span data-i18n="rcat.digital">Digital Transformation</span><b>18</b></li>
+            <li data-cmd="library"><span data-i18n="rcat.infra">Infrastructure</span><b>22</b></li>
+            <li data-cmd="library"><span data-i18n="rcat.managed">Managed Services</span><b>12</b></li>
+            <li data-cmd="library"><span data-i18n="rcat.ai">Artificial Intelligence</span><b>22</b></li>
+            <li data-cmd="library"><span data-i18n="rcat.apps">Applications &amp; Systems</span><b>18</b></li>
+          </ul>
+          <span class="lib-sub" data-i18n="lib.recent">Recently added</span>
+          <ul class="recent-list">
+            <li><span class="rl-ico">▤</span><span class="rl-main"><span class="rl-t" data-i18n="rb.1">Cloud Platform Specification</span><span class="rl-d">2026/07/14</span></span></li>
+            <li><span class="rl-ico">▤</span><span class="rl-main"><span class="rl-t" data-i18n="rb.2">Cybersecurity Operations SOW</span><span class="rl-d">2026/07/12</span></span></li>
+            <li><span class="rl-ico">▤</span><span class="rl-main"><span class="rl-t" data-i18n="rb.3">Managed IT Services RFP</span><span class="rl-d">2026/07/09</span></span></li>
+          </ul>
+          <div class="lib-actions">
+            <button class="btn btn-ghost btn-sm" data-cmd="addbook" data-i18n="cmd.addbook">Add Reference Book</button>
+            <button class="btn btn-ghost btn-sm" data-cmd="reindex" data-i18n="cmd.reindex">Reindex</button>
+          </div>
+          <div class="lib-stats">
+            <div><b>126</b><span data-i18n="lib.totalBooks">Total books</span></div>
+            <div><b>6</b><span data-i18n="lib.cats">Categories</span></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER: Upload workspace -->
+      <div class="ws-col ws-center">
       <div class="hero">
         <span class="eyebrow" data-i18n="up.eyebrow">Step 1 of 5</span>
         <h1 data-i18n-html="hero.h1">Review and improve procurement documents <span class="accent">before they go to tender.</span></h1>
@@ -119,6 +192,32 @@
         </div>
       </div>
       <p class="dz-status sr-only" id="dzStatus" role="status" aria-live="polite"></p>
+
+      <!-- Approved template panel -->
+      <div class="tpl-panel">
+        <div class="tpl-panel-l">
+          <span class="tpl-panel-ico">DOCX</span>
+          <div>
+            <span class="tpl-panel-label" data-i18n="tpl.current">Approved template</span>
+            <strong id="tplPanelName">Specification Template V3</strong>
+            <span class="tpl-panel-meta"><span data-i18n="tpl.version">Version</span> V3 · <span data-i18n="tpl.updated">Updated</span> 2026/07/14</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="tplReplaceBtn" data-i18n="tpl.replace">Replace template</button>
+      </div>
+
+      <!-- AI processing pipeline (preview) -->
+      <div class="ai-pipeline">
+        <h3 data-i18n="pipe.title">AI processing pipeline</h3>
+        <div class="pipe-steps">
+          <span class="pipe-step"><span class="pipe-n">1</span><span data-i18n="stg.1">Document structure</span></span>
+          <span class="pipe-step"><span class="pipe-n">2</span><span data-i18n="stg.2">Requirement extraction</span></span>
+          <span class="pipe-step"><span class="pipe-n">3</span><span data-i18n="stg.3">Knowledge matching</span></span>
+          <span class="pipe-step"><span class="pipe-n">4</span><span data-i18n="stg.4">Content enhancement</span></span>
+          <span class="pipe-step"><span class="pipe-n">5</span><span data-i18n="stg.5">Template generation</span></span>
+          <span class="pipe-step"><span class="pipe-n">6</span><span data-i18n="stg.6">Executive report</span></span>
+        </div>
+      </div>
 
       <!-- What happens after upload (secondary, collapsible) -->
       <details class="after-help">
@@ -188,6 +287,34 @@
           </button>
         </div>
       </section>
+      </div><!-- /ws-center -->
+
+      <!-- RIGHT: Knowledge Dashboard -->
+      <aside class="ws-col ws-right" aria-label="Knowledge Dashboard">
+        <div class="panel">
+          <div class="panel-head"><h2 class="panel-title" data-i18n="dash.title">Knowledge Dashboard</h2></div>
+          <dl class="kv">
+            <div><dt data-i18n="dash.type">Document type</dt><dd id="dashType" data-i18n="dash.await">Awaiting upload</dd></div>
+            <div><dt data-i18n="dash.lang">Language</dt><dd id="dashLang">—</dd></div>
+            <div><dt data-i18n="dash.cat">Category</dt><dd id="dashCat">—</dd></div>
+            <div><dt data-i18n="dash.pages">Pages</dt><dd id="dashPages">—</dd></div>
+            <div><dt data-i18n="dash.refs">Reference books found</dt><dd id="dashRefs">—</dd></div>
+            <div><dt data-i18n="dash.tpl">Current template</dt><dd>Specification Template V3</dd></div>
+            <div><dt data-i18n="dash.out">Expected output</dt><dd data-i18n="dash.outVal">Improved SoW + report</dd></div>
+          </dl>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2 class="panel-title" data-i18n="ov.title">Library overview</h2></div>
+          <div class="ov-grid">
+            <div><b>126</b><span data-i18n="lib.totalBooks">Total books</span></div>
+            <div><b>6</b><span data-i18n="lib.cats">Categories</span></div>
+            <div><b>2026/07/14</b><span data-i18n="ov.updated">Last update</span></div>
+            <div><b class="ok" data-i18n="hdr.ready">Ready</b><span data-i18n="ov.index">Index status</span></div>
+          </div>
+        </div>
+      </aside>
+
+     </div><!-- /workspace -->
     </section>
 
     <!-- ===================== ANALYSING OVERLAY ===================== -->
@@ -196,12 +323,12 @@
         <div class="spinner"></div>
         <h2 id="analysingDoc" data-i18n="an.analysing">Analysing document…</h2>
         <ul class="analysing-steps" id="analysingSteps">
-          <li data-step="parse" data-i18n="an.parse">Reading and structuring the document</li>
-          <li data-step="dup" data-i18n="an.dup">Detecting duplicated and overlapping scope</li>
-          <li data-step="req" data-i18n="an.req">Assessing requirement strength and clarity</li>
-          <li data-step="gap" data-i18n="an.gap">Checking deliverables, KPIs, SLAs &amp; acceptance criteria</li>
-          <li data-step="gov" data-i18n="an.gov">Evaluating governance and cost optimisation</li>
-          <li data-step="gen" data-i18n="an.gen">Generating recommendations &amp; improved version</li>
+          <li data-step="parse"><span data-i18n="an.parse">Document structure</span><span class="stg-pct"></span></li>
+          <li data-step="dup"><span data-i18n="an.dup">Requirement extraction</span><span class="stg-pct"></span></li>
+          <li data-step="req"><span data-i18n="an.req">Knowledge matching</span><span class="stg-pct"></span></li>
+          <li data-step="gap"><span data-i18n="an.gap">Content enhancement</span><span class="stg-pct"></span></li>
+          <li data-step="gov"><span data-i18n="an.gov">Template generation</span><span class="stg-pct"></span></li>
+          <li data-step="gen"><span data-i18n="an.gen">Executive report</span><span class="stg-pct"></span></li>
         </ul>
       </div>
     </section>

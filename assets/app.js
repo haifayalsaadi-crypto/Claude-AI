@@ -9,6 +9,36 @@
       "brand.ai": "AI Powered",
       "user.name": "Procurement Specialist",
       "user.role": "Governance & Tendering",
+      "hdr.search": "Ask the assistant or search specification books…",
+      "hdr.engine": "AI Engine", "hdr.library": "Knowledge Library",
+      "hdr.template": "Approved Template", "hdr.index": "Library Index",
+      "hdr.ready": "Ready", "hdr.work": "Ready to work",
+      "hdr.notif": "Notifications", "hdr.admin": "Administrator menu",
+      "cmd.new": "New Specification", "cmd.library": "Reference Library",
+      "cmd.template": "Template Manager", "cmd.addbook": "Add Reference Book",
+      "cmd.reindex": "Reindex Library", "cmd.reports": "Reports", "cmd.settings": "Settings",
+      "lib.title": "Smart Reference Library", "lib.search": "Search the library",
+      "lib.categories": "Categories", "lib.recent": "Recently added",
+      "lib.totalBooks": "Total books", "lib.cats": "Categories",
+      "rcat.cyber": "Cybersecurity", "rcat.digital": "Digital Transformation",
+      "rcat.infra": "Infrastructure", "rcat.managed": "Managed Services",
+      "rcat.ai": "Artificial Intelligence", "rcat.apps": "Applications & Systems",
+      "rb.1": "Cloud Platform Specification", "rb.2": "Cybersecurity Operations SOW",
+      "rb.3": "Managed IT Services RFP",
+      "tpl.current": "Approved template", "tpl.version": "Version",
+      "tpl.updated": "Updated", "tpl.replace": "Replace template",
+      "pipe.title": "AI processing pipeline",
+      "stg.1": "Document structure", "stg.2": "Requirement extraction",
+      "stg.3": "Knowledge matching", "stg.4": "Content enhancement",
+      "stg.5": "Template generation", "stg.6": "Executive report",
+      "dash.title": "Knowledge Dashboard", "dash.type": "Document type",
+      "dash.lang": "Language", "dash.cat": "Category", "dash.pages": "Pages",
+      "dash.refs": "Reference books found", "dash.tpl": "Current template",
+      "dash.out": "Expected output", "dash.outVal": "Improved SoW + report",
+      "dash.await": "Awaiting upload",
+      "ov.title": "Library overview", "ov.updated": "Last update", "ov.index": "Index status",
+      "phase.soon": "This capability arrives in a later phase.",
+      "search.soon": "AI search arrives in a later phase.",
       "step.upload": "Upload", "step.analysis": "Analysis", "step.findings": "Recommendations",
       "step.improve": "Improved Document", "step.report": "Executive Report",
       "step.upload.d": "Add your document", "step.analysis.d": "AI reviews quality & gaps",
@@ -41,12 +71,12 @@
       "sample.use": "Use this →",
       "an.analysing": "Analysing document…",
       "an.prefix": "Analysing: ",
-      "an.parse": "Reading and structuring the document",
-      "an.dup": "Detecting duplicated and overlapping scope",
-      "an.req": "Assessing requirement strength and clarity",
-      "an.gap": "Checking deliverables, KPIs, SLAs & acceptance criteria",
-      "an.gov": "Evaluating governance and cost optimisation",
-      "an.gen": "Generating recommendations & improved version",
+      "an.parse": "Document structure",
+      "an.dup": "Requirement extraction",
+      "an.req": "Knowledge matching",
+      "an.gap": "Content enhancement",
+      "an.gov": "Template generation",
+      "an.gen": "Executive report",
       "an.summary": "Analysis summary",
       "score.desc": "Overall document quality before improvement. Reflects clarity, completeness, measurability and governance.",
       "tag.needs": "Needs improvement", "tag.ok": "Acceptable — improvable", "tag.strong": "Strong",
@@ -112,6 +142,36 @@
       "brand.ai": "مدعوم بالذكاء الاصطناعي",
       "user.name": "أخصائي مشتريات",
       "user.role": "الحوكمة والمنافسات",
+      "hdr.search": "اسأل المساعد أو ابحث في الكراسات المرجعية…",
+      "hdr.engine": "محرك الذكاء الاصطناعي", "hdr.library": "المكتبة المرجعية",
+      "hdr.template": "القالب المعتمد", "hdr.index": "فهرس المكتبة",
+      "hdr.ready": "جاهز", "hdr.work": "جاهز للعمل",
+      "hdr.notif": "الإشعارات", "hdr.admin": "قائمة المدير",
+      "cmd.new": "كراسة جديدة", "cmd.library": "المكتبة المرجعية",
+      "cmd.template": "إدارة القوالب", "cmd.addbook": "إضافة كراسة مرجعية",
+      "cmd.reindex": "إعادة فهرسة المكتبة", "cmd.reports": "التقارير", "cmd.settings": "الإعدادات",
+      "lib.title": "المكتبة المرجعية الذكية", "lib.search": "ابحث داخل المكتبة",
+      "lib.categories": "التصنيفات", "lib.recent": "أحدث الكراسات المضافة",
+      "lib.totalBooks": "إجمالي الكراسات", "lib.cats": "التصنيفات",
+      "rcat.cyber": "الأمن السيبراني", "rcat.digital": "التحول الرقمي",
+      "rcat.infra": "البنية التحتية", "rcat.managed": "الخدمات المُدارة",
+      "rcat.ai": "الذكاء الاصطناعي", "rcat.apps": "التطبيقات والأنظمة",
+      "rb.1": "مواصفات المنصة السحابية", "rb.2": "نطاق عمل عمليات الأمن السيبراني",
+      "rb.3": "كراسة شروط خدمات تقنية المعلومات المُدارة",
+      "tpl.current": "القالب المعتمد", "tpl.version": "الإصدار",
+      "tpl.updated": "آخر تحديث", "tpl.replace": "استبدال القالب",
+      "pipe.title": "مسار المعالجة بالذكاء الاصطناعي",
+      "stg.1": "تحليل هيكل المستند", "stg.2": "استخراج المتطلبات",
+      "stg.3": "مطابقة المكتبة المرجعية", "stg.4": "تحسين المحتوى",
+      "stg.5": "إنشاء المستند من القالب", "stg.6": "إعداد التقرير التنفيذي",
+      "dash.title": "لوحة المعرفة", "dash.type": "نوع المستند",
+      "dash.lang": "اللغة", "dash.cat": "التصنيف", "dash.pages": "عدد الصفحات",
+      "dash.refs": "الكراسات المرجعية المطابقة", "dash.tpl": "القالب الحالي",
+      "dash.out": "المخرجات المتوقعة", "dash.outVal": "كراسة محسّنة + تقرير تنفيذي",
+      "dash.await": "بانتظار رفع مستند",
+      "ov.title": "نظرة عامة على المكتبة", "ov.updated": "آخر تحديث", "ov.index": "حالة الفهرسة",
+      "phase.soon": "تتوفر هذه الميزة في مرحلة لاحقة.",
+      "search.soon": "بحث الذكاء الاصطناعي يتوفر في مرحلة لاحقة.",
       "step.upload": "رفع المستند", "step.analysis": "التحليل", "step.findings": "التوصيات",
       "step.improve": "المستند المُحسّن", "step.report": "التقرير التنفيذي",
       "step.upload.d": "أضف مستندك", "step.analysis.d": "فحص الجودة والفجوات",
@@ -144,12 +204,12 @@
       "sample.use": "استخدم هذا ←",
       "an.analysing": "جارٍ تحليل المستند…",
       "an.prefix": "جارٍ التحليل: ",
-      "an.parse": "قراءة المستند وهيكلته",
-      "an.dup": "اكتشاف التكرار والتداخل في النطاق",
-      "an.req": "تقييم قوة المتطلبات ووضوحها",
-      "an.gap": "فحص المخرجات ومؤشرات الأداء واتفاقيات مستوى الخدمة ومعايير القبول",
-      "an.gov": "تقييم الحوكمة وفرص تحسين التكلفة",
-      "an.gen": "إنشاء التوصيات والنسخة المُحسّنة",
+      "an.parse": "تحليل هيكل المستند",
+      "an.dup": "استخراج المتطلبات",
+      "an.req": "مطابقة المكتبة المرجعية",
+      "an.gap": "تحسين المحتوى",
+      "an.gov": "إنشاء المستند من القالب",
+      "an.gen": "إعداد التقرير التنفيذي",
       "an.summary": "ملخص التحليل",
       "score.desc": "الجودة الإجمالية للمستند قبل التحسين. تعكس الوضوح والاكتمال وقابلية القياس والحوكمة.",
       "tag.needs": "بحاجة إلى تحسين", "tag.ok": "مقبول — قابل للتحسين", "tag.strong": "قوي",
@@ -214,15 +274,15 @@
 
   /* ---------------- bilingual data ---------------- */
   const SAMPLES = {
-    it:    { score: 58, from: 58, to: 86,
+    it:    { score: 58, from: 58, to: 86, type: "RFP", pages: 42, catKey: "rcat.managed", refs: 7,
              name: { en: "Managed IT Services RFP", ar: "كراسة شروط خدمات تقنية المعلومات المُدارة" },
              desc: { en: "Standard RFP for outsourced, managed IT operations.", ar: "كراسة شروط نموذجية لعمليات تقنية معلومات مُدارة ومُسندة." },
              meta: { en: "42 pages · 18 scope items", ar: "42 صفحة · 18 بند نطاق" } },
-    cyber: { score: 61, from: 61, to: 88,
+    cyber: { score: 61, from: 61, to: 88, type: "SOW", pages: 27, catKey: "rcat.cyber", refs: 9,
              name: { en: "Cybersecurity Operations SOW", ar: "نطاق عمل عمليات الأمن السيبراني" },
              desc: { en: "Scope of work for a security operations centre (SOC).", ar: "نطاق عمل لمركز عمليات أمن سيبراني (SOC)." },
              meta: { en: "27 pages · 12 scope items", ar: "27 صفحة · 12 بند نطاق" } },
-    cloud: { score: 54, from: 54, to: 84,
+    cloud: { score: 54, from: 54, to: 84, type: "SPEC", pages: 35, catKey: "rcat.infra", refs: 6,
              name: { en: "Cloud Platform Technical Spec", ar: "المواصفات الفنية لمنصة سحابية" },
              desc: { en: "Technical specification for a cloud hosting platform.", ar: "مواصفات فنية لمنصة استضافة سحابية." },
              meta: { en: "35 pages · 21 scope items", ar: "35 صفحة · 21 بند نطاق" } }
@@ -357,6 +417,8 @@
 
     $$("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
     $$("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.getAttribute("data-i18n-html")); });
+    $$("[data-i18n-ph]").forEach(el => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $$("[data-i18n-title]").forEach(el => { el.setAttribute("title", t(el.getAttribute("data-i18n-title"))); });
 
     // sample cards
     $$(".scard").forEach(b => {
@@ -375,6 +437,24 @@
     buildCategories();
     if (analysed) { buildFindings(currentFilter); buildDiff(); }
     updateFilterCounts();
+    if (dashReady) updateDashboard();
+  }
+
+  /* ---------- Knowledge Dashboard (Phase 1 UI) ---------- */
+  var dashReady = false;
+  function setTxt(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+  function updateDashboard() {
+    var s = activeSample || SAMPLES.it;
+    setTxt("dashType", s.type || "—");
+    setTxt("dashLang", lang === "ar" ? "العربية" : "Arabic");
+    setTxt("dashCat", s.catKey ? t(s.catKey) : "—");
+    setTxt("dashPages", s.pages ? String(s.pages) : "—");
+    setTxt("dashRefs", s.refs != null ? String(s.refs) : "—");
+  }
+  function resetDashboard() {
+    dashReady = false;
+    setTxt("dashType", t("dash.await"));
+    ["dashLang", "dashCat", "dashPages", "dashRefs"].forEach(function (id) { setTxt(id, "—"); });
   }
 
   function updateFilterCounts() {
@@ -447,15 +527,22 @@
 
   /* ---------------- analysis ---------------- */
   function runAnalysing() {
+    dashReady = true; updateDashboard();
     $("#analysingDoc").textContent = t("an.prefix") + activeSample.name[lang];
     const items = $$("#analysingSteps li");
-    items.forEach(i => i.classList.remove("active","done"));
+    items.forEach(i => { i.classList.remove("active","done"); var p = i.querySelector(".stg-pct"); if (p) p.textContent = ""; });
     showView("analysing");
     let i = 0;
     const tick = () => {
-      if (i > 0) { items[i-1].classList.remove("active"); items[i-1].classList.add("done"); }
-      if (i < items.length) { items[i].classList.add("active"); i++; setTimeout(tick, 600); }
-      else finishAnalysis();
+      if (i > 0) {
+        const prev = items[i-1]; prev.classList.remove("active"); prev.classList.add("done");
+        const pp = prev.querySelector(".stg-pct"); if (pp) pp.textContent = "100%";
+      }
+      if (i < items.length) {
+        items[i].classList.add("active");
+        const cp = items[i].querySelector(".stg-pct"); if (cp) cp.textContent = (25 + Math.floor(Math.random()*55)) + "%";
+        i++; setTimeout(tick, 600);
+      } else finishAnalysis();
     };
     setTimeout(tick, 400);
   }
@@ -765,8 +852,37 @@
 
   $("#downloadBtn").addEventListener("click", downloadImprovedDocx);
   $("#exportReport").addEventListener("click", exportReportPdf);
-  $("#restartBtn").addEventListener("click", () => { analysed = false; setDzState("idle"); showView("upload"); });
+  $("#restartBtn").addEventListener("click", () => { analysed = false; setDzState("idle"); resetDashboard(); showView("upload"); });
   $$(".filter").forEach(f => f.addEventListener("click", () => setFilter(f.dataset.sev)));
+
+  /* ---------- Enterprise command bar / header wiring (Phase 1) ---------- */
+  function phaseToast() { toast(t("phase.soon")); }
+  function scrollToLibrary() {
+    var el = document.querySelector(".ws-left");
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function cmdAction(cmd) {
+    switch (cmd) {
+      case "new": analysed = false; if (typeof setDzState === "function") setDzState("idle"); resetDashboard(); showView("upload"); window.scrollTo({ top: 0, behavior: "smooth" }); break;
+      case "template":
+      case "settings": openAdmin(); break;
+      case "reports": if (analysed) showView("report"); else toast(t("toast.first")); break;
+      case "library": scrollToLibrary(); break;
+      default: phaseToast(); // addbook, reindex — later phases
+    }
+  }
+  document.addEventListener("click", function (e) {
+    var c = e.target.closest("[data-cmd]");
+    if (c) { e.preventDefault(); cmdAction(c.getAttribute("data-cmd")); }
+  });
+  var gs = document.getElementById("globalSearch");
+  if (gs) gs.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); toast(t("search.soon")); } });
+  var nb = document.getElementById("notifBtn");
+  if (nb) nb.addEventListener("click", phaseToast);
+  var am = document.getElementById("adminMenuBtn");
+  if (am) am.addEventListener("click", phaseToast);
+  var tr = document.getElementById("tplReplaceBtn");
+  if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openAdmin(); });
 
   // init
   applyLang(lang);
