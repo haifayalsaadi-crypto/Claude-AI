@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="phase1-shell-v7" />
+<meta name="x-build" content="modes-tabs-v8" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -56,10 +56,9 @@
   <!-- Enterprise command bar -->
   <nav class="commandbar" aria-label="Quick actions">
     <button class="cmd" data-cmd="new"><span class="cmd-ico">＋</span><span data-i18n="cmd.new">New Specification</span></button>
+    <button class="cmd" data-cmd="addbook"><span class="cmd-ico">＋</span><span data-i18n="cmd.addbook">Add Reference Book</span></button>
     <button class="cmd" data-cmd="library"><span class="cmd-ico">▤</span><span data-i18n="cmd.library">Reference Library</span></button>
     <button class="cmd" data-cmd="template"><span class="cmd-ico">▦</span><span data-i18n="cmd.template">Template Manager</span></button>
-    <button class="cmd" data-cmd="addbook"><span class="cmd-ico">＋</span><span data-i18n="cmd.addbook">Add Reference Book</span></button>
-    <button class="cmd" data-cmd="reindex"><span class="cmd-ico">↻</span><span data-i18n="cmd.reindex">Reindex Library</span></button>
     <button class="cmd" data-cmd="reports"><span class="cmd-ico">▧</span><span data-i18n="cmd.reports">Reports</span></button>
     <button class="cmd" data-cmd="settings"><span class="cmd-ico">⚙</span><span data-i18n="cmd.settings">Settings</span></button>
   </nav>
@@ -69,23 +68,15 @@
     <nav class="stepper" id="stepper" aria-label="Progress">
       <button class="step is-active" data-view="upload" aria-current="step">
         <span class="step-circle"><span class="step-no">1</span></span>
-        <span class="step-text"><span class="step-title" data-i18n="step.upload">Upload</span><span class="step-desc" data-i18n="step.upload.d">Add your document</span></span>
+        <span class="step-text"><span class="step-title" data-i18n="step.setup">Setup</span><span class="step-desc" data-i18n="step.setup.d">Mode &amp; document</span></span>
       </button>
-      <button class="step" data-view="analysis">
+      <button class="step" data-view="analysing">
         <span class="step-circle"><span class="step-no">2</span></span>
-        <span class="step-text"><span class="step-title" data-i18n="step.analysis">Analysis</span><span class="step-desc" data-i18n="step.analysis.d">AI reviews quality &amp; gaps</span></span>
+        <span class="step-text"><span class="step-title" data-i18n="step.proc">AI Processing</span><span class="step-desc" data-i18n="step.proc.d">Knowledge pipeline</span></span>
       </button>
-      <button class="step" data-view="findings">
+      <button class="step" data-view="results">
         <span class="step-circle"><span class="step-no">3</span></span>
-        <span class="step-text"><span class="step-title" data-i18n="step.findings">Recommendations</span><span class="step-desc" data-i18n="step.findings.d">Prioritised fixes</span></span>
-      </button>
-      <button class="step" data-view="improve">
-        <span class="step-circle"><span class="step-no">4</span></span>
-        <span class="step-text"><span class="step-title" data-i18n="step.improve">Improved Document</span><span class="step-desc" data-i18n="step.improve.d">Enhanced version</span></span>
-      </button>
-      <button class="step" data-view="report">
-        <span class="step-circle"><span class="step-no">5</span></span>
-        <span class="step-text"><span class="step-title" data-i18n="step.report">Executive Report</span><span class="step-desc" data-i18n="step.report.d">Summary for leadership</span></span>
+        <span class="step-text"><span class="step-title" data-i18n="step.results">Results</span><span class="step-desc" data-i18n="step.results.d">Tabs &amp; exports</span></span>
       </button>
     </nav>
   </div>
@@ -94,7 +85,35 @@
 
     <!-- ===================== UPLOAD ===================== -->
     <section class="view is-active" id="view-upload">
-     <div class="workspace">
+
+     <!-- Operation Mode selection (required first step) -->
+     <section class="opmode" aria-label="Operation mode">
+       <div class="opmode-head">
+         <span class="eyebrow" data-i18n="mode.eyebrow">Step 1 · Operation mode</span>
+         <h1 data-i18n="mode.title">What would you like to do?</h1>
+         <p class="lead" data-i18n="mode.lead">Choose how the AI assistant should work with your specification book.</p>
+       </div>
+       <div class="opmode-cards" role="group" aria-label="Operation mode">
+         <button type="button" class="opcard" data-mode="improve" aria-pressed="false">
+           <span class="opcard-ico" aria-hidden="true">
+             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+           </span>
+           <span class="opcard-t" data-i18n="mode.improve">Improve Existing Specification Book</span>
+           <span class="opcard-d" data-i18n="mode.improveD">Upload an existing document — the AI reviews it, enhances the content, and regenerates it from the approved template.</span>
+           <span class="opcard-cta" data-i18n="mode.select">Select →</span>
+         </button>
+         <button type="button" class="opcard" data-mode="create" aria-pressed="false">
+           <span class="opcard-ico" aria-hidden="true">
+             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+           </span>
+           <span class="opcard-t" data-i18n="mode.create">Create New Specification Book</span>
+           <span class="opcard-d" data-i18n="mode.createD">Generate a brand-new specification from the approved template and the Ministry reference library.</span>
+           <span class="opcard-cta" data-i18n="mode.select">Select →</span>
+         </button>
+       </div>
+     </section>
+
+     <div class="workspace" data-mode="">
 
       <!-- LEFT: Smart Reference Library -->
       <aside class="ws-col ws-left" aria-label="Reference Library">
@@ -133,8 +152,15 @@
         </div>
       </aside>
 
-      <!-- CENTER: Upload workspace -->
+      <!-- CENTER: Upload / generation workspace -->
       <div class="ws-col ws-center">
+
+      <div class="mode-hint">
+        <span class="mh-ico" aria-hidden="true">☝</span>
+        <p data-i18n="mode.hint">Select an operation mode above to begin.</p>
+      </div>
+
+      <div class="mode-improve">
       <div class="hero">
         <span class="eyebrow" data-i18n="up.eyebrow">Step 1 of 5</span>
         <h1 data-i18n-html="hero.h1">Review and improve procurement documents <span class="accent">before they go to tender.</span></h1>
@@ -287,6 +313,38 @@
           </button>
         </div>
       </section>
+      </div><!-- /mode-improve -->
+
+      <div class="mode-create">
+        <div class="create-head">
+          <span class="eyebrow" data-i18n="create.eyebrow">Create new</span>
+          <h2 data-i18n="create.title">Create a new specification book</h2>
+          <p class="muted" data-i18n="create.sub">Generate a new Ministry specification from the approved template and the reference library.</p>
+        </div>
+        <div class="create-form">
+          <label class="cf-field">
+            <span data-i18n="create.name">Specification title</span>
+            <input id="createName" type="text" data-i18n-ph="create.namePh" placeholder="e.g. Managed Cloud Services" />
+          </label>
+          <label class="cf-field">
+            <span data-i18n="create.cat">Category</span>
+            <select id="createCat">
+              <option value="rcat.cyber" data-i18n="rcat.cyber">Cybersecurity</option>
+              <option value="rcat.digital" data-i18n="rcat.digital">Digital Transformation</option>
+              <option value="rcat.infra" data-i18n="rcat.infra">Infrastructure</option>
+              <option value="rcat.managed" data-i18n="rcat.managed">Managed Services</option>
+              <option value="rcat.ai" data-i18n="rcat.ai">Artificial Intelligence</option>
+              <option value="rcat.apps" data-i18n="rcat.apps">Applications &amp; Systems</option>
+            </select>
+          </label>
+          <div class="cf-tpl">
+            <span class="cf-tpl-l" data-i18n="create.tpl">Approved template</span>
+            <b>Specification Template V3</b>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="createGenBtn" data-i18n="create.generate">Generate specification</button>
+      </div>
+
       </div><!-- /ws-center -->
 
       <!-- RIGHT: Knowledge Dashboard -->
@@ -333,17 +391,30 @@
       </div>
     </section>
 
-    <!-- ===================== ANALYSIS ===================== -->
-    <section class="view" id="view-analysis">
-      <div class="view-head">
+    <!-- ===================== RESULTS (tabbed) ===================== -->
+    <section class="view" id="view-results">
+      <div class="results-head">
         <div>
-          <span class="eyebrow" data-i18n="eyebrow.analysis">Step 2 of 5</span>
-          <h2 data-i18n="an.summary">Analysis summary</h2>
-          <p class="muted" id="analysisDocName">Managed IT Services RFP</p>
+          <span class="eyebrow" data-i18n="res.eyebrow">Results</span>
+          <h2 data-i18n="res.title">AI results</h2>
+          <p class="muted" id="resDocName">—</p>
         </div>
-        <button class="btn btn-primary" data-goto="findings" data-i18n="btn.viewrec">View recommendations →</button>
+        <div class="results-actions">
+          <button class="btn btn-primary" id="downloadBtn" data-i18n="btn.download">Download improved version</button>
+          <button class="btn btn-ghost" id="exportReport" data-i18n="btn.export">Export report (PDF)</button>
+          <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.review">Review another document</button>
+        </div>
       </div>
 
+      <div class="tabbar" role="tablist">
+        <button class="rtab is-active" data-tab="overview" role="tab" data-i18n="tab.overview">Overview</button>
+        <button class="rtab" data-tab="improvements" role="tab" data-i18n="tab.improvements">AI Improvements</button>
+        <button class="rtab" data-tab="differences" role="tab" data-i18n="tab.differences">Differences</button>
+        <button class="rtab" data-tab="references" role="tab" data-i18n="tab.references">Knowledge References</button>
+        <button class="rtab" data-tab="report" role="tab" data-i18n="tab.report">Executive Report</button>
+      </div>
+
+      <div class="tabpanel is-active" id="tab-overview" role="tabpanel">
       <div class="score-row">
         <div class="score-card">
           <div class="gauge" id="gauge">
@@ -369,19 +440,10 @@
 
       <h3 class="section-title" data-i18n="cat.section">Findings by category</h3>
       <div class="cat-grid" id="catGrid"><!-- injected --></div>
-    </section>
+      </div><!-- /tab-overview -->
 
-    <!-- ===================== FINDINGS ===================== -->
-    <section class="view" id="view-findings">
-      <div class="view-head">
-        <div>
-          <span class="eyebrow" data-i18n="eyebrow.findings">Step 3 of 5</span>
-          <h2 data-i18n="fnd.title">Recommendations</h2>
-          <p class="muted" data-i18n="fnd.sub">Prioritised findings with recommended actions. Every change is explained and reversible.</p>
-        </div>
-        <button class="btn btn-primary" data-goto="improve" data-i18n="btn.seeimproved">See improved document →</button>
-      </div>
-
+      <div class="tabpanel" id="tab-improvements" role="tabpanel">
+      <p class="muted panel-lead" data-i18n="fnd.sub">Prioritised findings with recommended actions. Every change is explained and reversible.</p>
       <div class="filters" id="filters" role="group" aria-label="Filter by severity">
         <button class="filter is-active" data-sev="all" data-i18n="flt.all">All</button>
         <button class="filter" data-sev="high" data-i18n="flt.high">High</button>
@@ -390,33 +452,20 @@
       </div>
 
       <div class="findings" id="findings"><!-- injected --></div>
-    </section>
+      </div><!-- /tab-improvements -->
 
-    <!-- ===================== IMPROVE ===================== -->
-    <section class="view" id="view-improve">
-      <div class="view-head">
-        <div>
-          <span class="eyebrow" data-i18n="eyebrow.improve">Step 4 of 5</span>
-          <h2 data-i18n="imp.title">Improved document</h2>
-          <p class="muted" data-i18n="imp.sub">Weak content rewritten, measurable outcomes added, missing elements supplied.</p>
-        </div>
-        <button class="btn btn-primary" id="downloadBtn" data-i18n="btn.download">Download improved version</button>
-      </div>
-
+      <div class="tabpanel" id="tab-differences" role="tabpanel">
+      <p class="muted panel-lead" data-i18n="imp.sub">Weak content rewritten, measurable outcomes added, missing elements supplied.</p>
       <div class="diff" id="diff"><!-- injected --></div>
-    </section>
+      </div><!-- /tab-differences -->
 
-    <!-- ===================== REPORT ===================== -->
-    <section class="view" id="view-report">
-      <div class="view-head">
-        <div>
-          <span class="eyebrow" data-i18n="eyebrow.report">Step 5 of 5</span>
-          <h2 data-i18n="rpt.title">Executive report</h2>
-          <p class="muted" id="reportDocName">Managed IT Services RFP</p>
-        </div>
-        <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.review">Review another document</button>
-      </div>
+      <div class="tabpanel" id="tab-references" role="tabpanel">
+      <p class="muted panel-lead" data-i18n="ref.sub">Reference books matched from the Ministry knowledge library.</p>
+      <div class="ref-list" id="refList"><!-- injected --></div>
+      </div><!-- /tab-references -->
 
+      <div class="tabpanel" id="tab-report" role="tabpanel">
+      <h3 class="section-title" data-i18n="rpt.title">Executive report</h3>
       <div class="report-cards">
         <div class="rcard">
           <span class="rcard-lbl" data-i18n="rc.uplift">Quality uplift</span>
@@ -444,11 +493,8 @@
         <h3 data-i18n="rpt.summaryTitle">Summary for leadership</h3>
         <p data-i18n-html="rpt.p1">The submitted document was assessed as <strong>needs improvement</strong> prior to tendering, with 34 issues identified across scope quality, requirement strength, performance measures and governance. The platform detected 6 duplicated scope items and overlap with two previous procurements, 9 weak or vague requirements, and 11 missing elements — including absent KPIs, SLAs and acceptance criteria that would have made supplier performance difficult to enforce.</p>
         <p data-i18n-html="rpt.p2">An improved, tender-ready version was generated automatically: weak scope items and requirements were rewritten, measurable outcomes and governance provisions were added, and missing content was supplied. The document's quality score rose from <strong>58</strong> to <strong>86</strong>, with 91% of issues resolved without manual rework, while five cost-optimisation opportunities were flagged for specialist review. Each change is fully traceable, and the specialist retains final control over the document released to the market.</p>
-        <div class="report-actions">
-          <button class="btn btn-primary" id="exportReport" data-i18n="btn.export">Export report (PDF)</button>
-          <button class="btn btn-ghost" data-goto="analysis" data-i18n="btn.backanalysis">Back to analysis</button>
-        </div>
-      </div>
+      </div><!-- /report-body -->
+      </div><!-- /tab-report -->
     </section>
 
   </main>

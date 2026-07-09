@@ -39,6 +39,30 @@
       "ov.title": "Library overview", "ov.updated": "Last update", "ov.index": "Index status",
       "phase.soon": "This capability arrives in a later phase.",
       "search.soon": "AI search arrives in a later phase.",
+      "step.setup": "Setup", "step.setup.d": "Mode & document",
+      "step.proc": "AI Processing", "step.proc.d": "Knowledge pipeline",
+      "step.results": "Results", "step.results.d": "Tabs & exports",
+      "mode.eyebrow": "Step 1 · Operation mode",
+      "mode.title": "What would you like to do?",
+      "mode.lead": "Choose how the AI assistant should work with your specification book.",
+      "mode.improve": "Improve Existing Specification Book",
+      "mode.improveD": "Upload an existing document — the AI reviews it, enhances the content, and regenerates it from the approved template.",
+      "mode.create": "Create New Specification Book",
+      "mode.createD": "Generate a brand-new specification from the approved template and the Ministry reference library.",
+      "mode.select": "Select →", "mode.hint": "Select an operation mode above to begin.",
+      "create.eyebrow": "Create new", "create.title": "Create a new specification book",
+      "create.sub": "Generate a new Ministry specification from the approved template and the reference library.",
+      "create.name": "Specification title", "create.namePh": "e.g. Managed Cloud Services",
+      "create.cat": "Category", "create.tpl": "Approved template",
+      "create.generate": "Generate specification",
+      "res.eyebrow": "Results", "res.title": "AI results",
+      "tab.overview": "Overview", "tab.improvements": "AI Improvements",
+      "tab.differences": "Differences", "tab.references": "Knowledge References",
+      "tab.report": "Executive Report",
+      "ref.sub": "Reference books matched from the Ministry knowledge library.",
+      "ref.1": "Cybersecurity Operations Framework", "ref.2": "Managed Services SLA Standards",
+      "ref.3": "Cloud Infrastructure Baseline", "ref.4": "Digital Governance Guide",
+      "ref.5": "KPI & Acceptance Criteria Library",
       "step.upload": "Upload", "step.analysis": "Analysis", "step.findings": "Recommendations",
       "step.improve": "Improved Document", "step.report": "Executive Report",
       "step.upload.d": "Add your document", "step.analysis.d": "AI reviews quality & gaps",
@@ -172,6 +196,30 @@
       "ov.title": "نظرة عامة على المكتبة", "ov.updated": "آخر تحديث", "ov.index": "حالة الفهرسة",
       "phase.soon": "تتوفر هذه الميزة في مرحلة لاحقة.",
       "search.soon": "بحث الذكاء الاصطناعي يتوفر في مرحلة لاحقة.",
+      "step.setup": "الإعداد", "step.setup.d": "الوضع والمستند",
+      "step.proc": "المعالجة", "step.proc.d": "مسار المعرفة",
+      "step.results": "النتائج", "step.results.d": "التبويبات والتصدير",
+      "mode.eyebrow": "الخطوة 1 · وضع التشغيل",
+      "mode.title": "ماذا تريد أن تفعل؟",
+      "mode.lead": "اختر كيف يعمل مساعد الذكاء الاصطناعي مع كراسة المواصفات.",
+      "mode.improve": "تحسين كراسة مواصفات قائمة",
+      "mode.improveD": "ارفع مستندًا قائمًا — يراجعه الذكاء الاصطناعي ويحسّن محتواه ويعيد إنشاءه من القالب المعتمد.",
+      "mode.create": "إنشاء كراسة مواصفات جديدة",
+      "mode.createD": "أنشئ كراسة جديدة كليًا من القالب المعتمد ومكتبة الوزارة المرجعية.",
+      "mode.select": "اختيار ←", "mode.hint": "اختر وضع التشغيل بالأعلى للبدء.",
+      "create.eyebrow": "إنشاء جديد", "create.title": "إنشاء كراسة مواصفات جديدة",
+      "create.sub": "أنشئ كراسة مواصفات جديدة من القالب المعتمد والمكتبة المرجعية.",
+      "create.name": "عنوان الكراسة", "create.namePh": "مثال: خدمات سحابية مُدارة",
+      "create.cat": "التصنيف", "create.tpl": "القالب المعتمد",
+      "create.generate": "إنشاء الكراسة",
+      "res.eyebrow": "النتائج", "res.title": "نتائج الذكاء الاصطناعي",
+      "tab.overview": "نظرة عامة", "tab.improvements": "تحسينات الذكاء الاصطناعي",
+      "tab.differences": "الفروقات", "tab.references": "المراجع المعرفية",
+      "tab.report": "التقرير التنفيذي",
+      "ref.sub": "كراسات مرجعية مطابقة من مكتبة الوزارة المعرفية.",
+      "ref.1": "إطار عمليات الأمن السيبراني", "ref.2": "معايير اتفاقيات مستوى الخدمة المُدارة",
+      "ref.3": "الخط الأساس للبنية التحتية السحابية", "ref.4": "دليل الحوكمة الرقمية",
+      "ref.5": "مكتبة مؤشرات الأداء ومعايير القبول",
       "step.upload": "رفع المستند", "step.analysis": "التحليل", "step.findings": "التوصيات",
       "step.improve": "المستند المُحسّن", "step.report": "التقرير التنفيذي",
       "step.upload.d": "أضف مستندك", "step.analysis.d": "فحص الجودة والفجوات",
@@ -398,8 +446,8 @@
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
   const steps = $$(".step");
-  const views = { upload:"view-upload", analysing:"view-analysing", analysis:"view-analysis",
-                  findings:"view-findings", improve:"view-improve", report:"view-report" };
+  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results" };
+  const stepOrder = ["upload","analysing","results"];
   let analysed = false;
   let activeSample = SAMPLES.it;
   let currentFilter = "all";
@@ -430,12 +478,12 @@
 
     $("#langToggle").textContent = t("langName");
 
-    $("#analysisDocName").textContent = activeSample.name[lang];
-    $("#reportDocName").textContent = activeSample.name[lang];
+    var rn = document.getElementById("resDocName");
+    if (rn) rn.textContent = activeSample.name[lang];
     updateScoreTag(currentScore);
 
     buildCategories();
-    if (analysed) { buildFindings(currentFilter); buildDiff(); }
+    if (analysed) { buildFindings(currentFilter); buildDiff(); buildRefs(); }
     updateFilterCounts();
     if (dashReady) updateDashboard();
   }
@@ -472,12 +520,10 @@
     $$(".view").forEach(v => v.classList.remove("is-active"));
     const el = document.getElementById(views[key]);
     if (el) el.classList.add("is-active");
-    const stepKey = key === "analysing" ? "upload" : key;
-    const order = ["upload","analysis","findings","improve","report"];
-    const idx = order.indexOf(stepKey);
+    const idx = stepOrder.indexOf(key);
     steps.forEach(s => {
-      const si = order.indexOf(s.dataset.view);
-      const active = s.dataset.view === stepKey;
+      const si = stepOrder.indexOf(s.dataset.view);
+      const active = s.dataset.view === key;
       s.classList.toggle("is-active", active);
       s.classList.toggle("is-done", idx > -1 && si > -1 && si < idx);
       if (active) s.setAttribute("aria-current", "step"); else s.removeAttribute("aria-current");
@@ -552,15 +598,40 @@
   function finishAnalysis() {
     analysed = true;
     currentScore = activeSample.score;
-    $("#analysisDocName").textContent = activeSample.name[lang];
-    $("#reportDocName").textContent = activeSample.name[lang];
+    setTxt("resDocName", activeSample.name[lang]);
     $("#upFrom").textContent = activeSample.from;
     $("#upTo").textContent = activeSample.to;
     buildCategories();
     buildFindings("all");
     buildDiff();
-    showView("analysis");
-    animateScores(activeSample.score);
+    buildRefs();
+    showResults("overview");
+  }
+
+  /* ---------- Results tabs ---------- */
+  function activateTab(tab) {
+    $$(".rtab").forEach(b => b.classList.toggle("is-active", b.dataset.tab === tab));
+    $$(".tabpanel").forEach(p => p.classList.toggle("is-active", p.id === "tab-" + tab));
+    if (tab === "overview") animateScores();
+  }
+  function showResults(tab) { showView("results"); activateTab(tab || "overview"); }
+
+  const REFS = [
+    { key: "ref.1", cat: "rcat.cyber", rel: 92 },
+    { key: "ref.2", cat: "rcat.managed", rel: 88 },
+    { key: "ref.3", cat: "rcat.infra", rel: 84 },
+    { key: "ref.4", cat: "rcat.digital", rel: 79 },
+    { key: "ref.5", cat: "rcat.ai", rel: 74 }
+  ];
+  function buildRefs() {
+    var wrap = document.getElementById("refList");
+    if (!wrap) return;
+    wrap.innerHTML = REFS.map(function (r) {
+      return '<div class="ref-item"><div class="ref-top"><span class="ref-ico">▤</span>'
+        + '<span class="ref-name">' + t(r.key) + '</span><span class="ref-cat">' + t(r.cat) + '</span></div>'
+        + '<div class="ref-rel"><span class="ref-bar"><span style="width:' + r.rel + '%"></span></span>'
+        + '<span class="ref-pct">' + r.rel + '%</span></div></div>';
+    }).join("");
   }
 
   function updateScoreTag(score) {
@@ -655,14 +726,36 @@
 
   steps.forEach(s => s.addEventListener("click", () => {
     const v = s.dataset.view;
-    if (v !== "upload" && !analysed) { toast(t("toast.first")); return; }
-    showView(v);
-    if (v === "analysis") animateScores();
+    if (v === "upload") { showView("upload"); return; }
+    if (!analysed) { toast(t("toast.first")); return; }
+    showResults("overview");
   }));
-  $$("[data-goto]").forEach(b => b.addEventListener("click", () => {
-    showView(b.dataset.goto);
-    if (b.dataset.goto === "analysis") animateScores();
-  }));
+  $$(".rtab").forEach(b => b.addEventListener("click", () => activateTab(b.dataset.tab)));
+
+  // Operation mode selection
+  var selectedMode = null;
+  function resetMode() {
+    selectedMode = null;
+    var ws = document.querySelector(".workspace"); if (ws) ws.setAttribute("data-mode", "");
+    $$(".opcard").forEach(c => c.setAttribute("aria-pressed", "false"));
+  }
+  function selectMode(mode) {
+    selectedMode = mode;
+    var ws = document.querySelector(".workspace"); if (ws) ws.setAttribute("data-mode", mode);
+    $$(".opcard").forEach(c => c.setAttribute("aria-pressed", c.dataset.mode === mode ? "true" : "false"));
+    if (ws && ws.scrollIntoView) ws.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  $$(".opcard").forEach(c => c.addEventListener("click", () => selectMode(c.dataset.mode)));
+
+  // Create New Specification — generate (reuses the AI pipeline)
+  var cg = document.getElementById("createGenBtn");
+  if (cg) cg.addEventListener("click", function () {
+    var nameEl = document.getElementById("createName");
+    var catEl = document.getElementById("createCat");
+    var nm = (nameEl && nameEl.value.trim()) || (lang === "ar" ? "كراسة مواصفات جديدة" : "New Specification Book");
+    var catKey = (catEl && catEl.value) || "rcat.managed";
+    startAnalysisDoc({ name: { en: nm, ar: nm }, score: 64, from: 64, to: 90, type: "SPEC", pages: 0, catKey: catKey, refs: 8 });
+  });
 
   // upload interactions
   const fileInput = $("#fileInput");
@@ -852,7 +945,7 @@
 
   $("#downloadBtn").addEventListener("click", downloadImprovedDocx);
   $("#exportReport").addEventListener("click", exportReportPdf);
-  $("#restartBtn").addEventListener("click", () => { analysed = false; setDzState("idle"); resetDashboard(); showView("upload"); });
+  $("#restartBtn").addEventListener("click", () => { analysed = false; setDzState("idle"); resetDashboard(); resetMode(); showView("upload"); });
   $$(".filter").forEach(f => f.addEventListener("click", () => setFilter(f.dataset.sev)));
 
   /* ---------- Enterprise command bar / header wiring (Phase 1) ---------- */
@@ -863,10 +956,10 @@
   }
   function cmdAction(cmd) {
     switch (cmd) {
-      case "new": analysed = false; if (typeof setDzState === "function") setDzState("idle"); resetDashboard(); showView("upload"); window.scrollTo({ top: 0, behavior: "smooth" }); break;
+      case "new": analysed = false; if (typeof setDzState === "function") setDzState("idle"); resetDashboard(); resetMode(); showView("upload"); window.scrollTo({ top: 0, behavior: "smooth" }); break;
       case "template":
       case "settings": openAdmin(); break;
-      case "reports": if (analysed) showView("report"); else toast(t("toast.first")); break;
+      case "reports": if (analysed) showResults("report"); else toast(t("toast.first")); break;
       case "library": scrollToLibrary(); break;
       default: phaseToast(); // addbook, reindex — later phases
     }
