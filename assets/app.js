@@ -446,7 +446,7 @@
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
   const steps = $$(".step");
-  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results" };
+  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results", knowledge:"view-knowledge" };
   const stepOrder = ["upload","analysing","results"];
   let analysed = false;
   let activeSample = SAMPLES.it;
@@ -486,6 +486,7 @@
     if (analysed) { buildFindings(currentFilter); buildDiff(); buildRefs(); }
     updateFilterCounts();
     if (dashReady) updateDashboard();
+    try { document.dispatchEvent(new CustomEvent("mot:langchange", { detail: { lang: lang } })); } catch (e) {}
   }
 
   /* ---------- Knowledge Dashboard (Phase 1 UI) ---------- */
@@ -520,6 +521,7 @@
     $$(".view").forEach(v => v.classList.remove("is-active"));
     const el = document.getElementById(views[key]);
     if (el) el.classList.add("is-active");
+    document.body.classList.toggle("in-knowledge", key === "knowledge");
     const idx = stepOrder.indexOf(key);
     steps.forEach(s => {
       const si = stepOrder.indexOf(s.dataset.view);
@@ -960,9 +962,14 @@
       case "template":
       case "settings": openAdmin(); break;
       case "reports": if (analysed) showResults("report"); else toast(t("toast.first")); break;
-      case "library": scrollToLibrary(); break;
-      default: phaseToast(); // addbook, reindex — later phases
+      case "library": openKnowledge("overview"); break;
+      case "addbook": openKnowledge("upload"); break;
+      default: phaseToast(); // reindex — later phases
     }
+  }
+  function openKnowledge(sub) {
+    if (window.MOTKnowledgeUI) window.MOTKnowledgeUI.open(sub || "overview");
+    else { showView("upload"); toast(t("phase.soon")); }
   }
   document.addEventListener("click", function (e) {
     var c = e.target.closest("[data-cmd]");
@@ -976,6 +983,9 @@
   if (am) am.addEventListener("click", phaseToast);
   var tr = document.getElementById("tplReplaceBtn");
   if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openAdmin(); });
+
+  // Bridge for the Reference Knowledge Center module
+  window.MOTApp = { showView: showView, openKnowledge: openKnowledge, lang: function () { return lang; }, t: t };
 
   // init
   applyLang(lang);
