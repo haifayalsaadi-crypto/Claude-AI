@@ -12,7 +12,8 @@
   var DB_NAME = "motKnowledgeDB";
   var STORE = "refbooks";
   var STORE_C = "clauses";
-  var VERSION = 2;
+  var STORE_T = "templates";
+  var VERSION = 3;
 
   function openDB() {
     return new Promise(function (resolve, reject) {
@@ -22,6 +23,7 @@
         var db = req.result;
         if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE, { keyPath: "id" });
         if (!db.objectStoreNames.contains(STORE_C)) db.createObjectStore(STORE_C, { keyPath: "id" });
+        if (!db.objectStoreNames.contains(STORE_T)) db.createObjectStore(STORE_T, { keyPath: "id" });
       };
       req.onsuccess = function () { resolve(req.result); };
       req.onerror = function () { reject(req.error); };
@@ -254,4 +256,92 @@
   };
 
   global.MOTClauses = CLAUSES;
+
+  /* ===================== Template Manager ===================== */
+  function tAll() {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var rq = db.transaction(STORE_T, "readonly").objectStore(STORE_T).getAll();
+        rq.onsuccess = function () { resolve(rq.result || []); };
+        rq.onerror = function () { reject(rq.error); };
+      });
+    });
+  }
+  function tGet(tid2) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var rq = db.transaction(STORE_T, "readonly").objectStore(STORE_T).get(tid2);
+        rq.onsuccess = function () { resolve(rq.result || null); };
+        rq.onerror = function () { reject(rq.error); };
+      });
+    });
+  }
+  function tTx(mode, fn) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var t = db.transaction(STORE_T, mode); fn(t.objectStore(STORE_T));
+        t.oncomplete = function () { resolve(); }; t.onerror = function () { reject(t.error); };
+      });
+    });
+  }
+  function tid() { return "tpl_" + Math.random().toString(36).slice(2, 9); }
+  function parsePH(buf) {
+    try { return (global.MOTTemplate && global.MOTTemplate.parsePlaceholders) ? global.MOTTemplate.parsePlaceholders(buf) : []; }
+    catch (e) { return []; }
+  }
+
+  function seedTemplates() {
+    return tAll().then(function (rows) {
+      if (rows && rows.length) return rows;
+      var fetchBuf = (typeof fetch === "function")
+        ? fetch("assets/templates/ministry-sow-template.docx").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).catch(function () { return null; })
+        : Promise.resolve(null);
+      return fetchBuf.then(function (buf) {
+        var ph = buf ? parsePH(buf) : [];
+        var blob = buf ? new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }) : null;
+        var base = { name: "قالب المواصفات المعتمد", docType: "sow", department: "procurement", language: "ar", fileName: "ministry-sow-template.docx" };
+        var recs = [
+          Object.assign({}, base, { id: tid(), version: "V1", status: "archived", isCurrent: false, notes: "الإصدار الأول", uploadDate: daysAgo(160), hasFile: false, fileBlob: null, placeholders: ph }),
+          Object.assign({}, base, { id: tid(), version: "V2", status: "archived", isCurrent: false, notes: "تحديث التنسيق والهوية", uploadDate: daysAgo(70), hasFile: !!blob, fileBlob: blob, placeholders: ph }),
+          Object.assign({}, base, { id: tid(), version: "V3", status: "active", isCurrent: true, notes: "الإصدار المعتمد الحالي", uploadDate: daysAgo(14), hasFile: !!blob, fileBlob: blob, placeholders: ph })
+        ];
+        return tTx("readwrite", function (store) { recs.forEach(function (r) { store.add(r); }); }).then(tAll);
+      });
+    });
+  }
+
+  var TEMPLATES = {
+    init: seedTemplates,
+    list: function () { return seedTemplates().then(function (rows) { return rows.sort(function (a, b) { return (b.uploadDate || "").localeCompare(a.uploadDate || ""); }); }); },
+    get: tGet,
+    getCurrent: function () { return tAll().then(function (rows) { return rows.filter(function (r) { return r.isCurrent; })[0] || null; }); },
+    add: function (obj) {
+      var rec = Object.assign({ id: tid(), name: "", version: "V1", docType: "sow", department: "procurement", language: "ar", status: "active", notes: "", isCurrent: false, uploadDate: now(), fileName: "", fileBlob: null, hasFile: false, placeholders: [] }, obj || {});
+      var doAdd = function (ph) { if (ph) rec.placeholders = ph; return tTx("readwrite", function (s) { s.add(rec); }).then(function () { return rec; }); };
+      if (rec.fileBlob && rec.fileBlob.arrayBuffer) { return rec.fileBlob.arrayBuffer().then(parsePH).then(doAdd); }
+      return doAdd(null);
+    },
+    update: function (tid2, patch) {
+      return tGet(tid2).then(function (rec) { if (!rec) throw new Error("NOT_FOUND"); var next = Object.assign({}, rec, patch, { id: tid2 }); return tTx("readwrite", function (s) { s.put(next); }).then(function () { return next; }); });
+    },
+    remove: function (tid2) { return tTx("readwrite", function (s) { s.delete(tid2); }); },
+    setCurrent: function (tid2) {
+      return tAll().then(function (rows) {
+        return tTx("readwrite", function (store) {
+          rows.forEach(function (r) {
+            var mk = (r.id === tid2);
+            store.put(Object.assign({}, r, { isCurrent: mk, status: mk ? "active" : (r.status === "active" ? "inactive" : r.status) }));
+          });
+        });
+      });
+    },
+    setStatus: function (tid2, status) { return TEMPLATES.update(tid2, { status: status }); },
+    replaceFile: function (tid2, blob, fileName) {
+      var apply = function (ph) { return TEMPLATES.update(tid2, { fileBlob: blob, fileName: fileName, hasFile: true, placeholders: ph, uploadDate: now() }); };
+      if (blob && blob.arrayBuffer) return blob.arrayBuffer().then(parsePH).then(apply);
+      return apply([]);
+    }
+  };
+
+  global.MOTTemplates = TEMPLATES;
 })(window);

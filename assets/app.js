@@ -446,7 +446,7 @@
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
   const steps = $$(".step");
-  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results", knowledge:"view-knowledge" };
+  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results", knowledge:"view-knowledge", templates:"view-templates" };
   const stepOrder = ["upload","analysing","results"];
   let analysed = false;
   let activeSample = SAMPLES.it;
@@ -522,6 +522,7 @@
     const el = document.getElementById(views[key]);
     if (el) el.classList.add("is-active");
     document.body.classList.toggle("in-knowledge", key === "knowledge");
+    document.body.classList.toggle("in-templates", key === "templates");
     const idx = stepOrder.indexOf(key);
     steps.forEach(s => {
       const si = stepOrder.indexOf(s.dataset.view);
@@ -921,7 +922,7 @@
   function openAdmin() { $("#adminModal").hidden = false; document.body.style.overflow = "hidden"; $("#tplMsg").textContent = ""; refreshAdmin(); }
   function closeAdmin() { $("#adminModal").hidden = true; document.body.style.overflow = ""; }
 
-  $("#adminBtn").addEventListener("click", openAdmin);
+  $("#adminBtn").addEventListener("click", openTemplates);
   $("#adminClose").addEventListener("click", closeAdmin);
   $("#adminModal").addEventListener("click", function (e) { if (e.target.id === "adminModal") closeAdmin(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#adminModal").hidden) closeAdmin(); });
@@ -959,7 +960,7 @@
   function cmdAction(cmd) {
     switch (cmd) {
       case "new": analysed = false; if (typeof setDzState === "function") setDzState("idle"); resetDashboard(); resetMode(); showView("upload"); window.scrollTo({ top: 0, behavior: "smooth" }); break;
-      case "template":
+      case "template": openTemplates(); break;
       case "settings": openAdmin(); break;
       case "reports": if (analysed) showResults("report"); else toast(t("toast.first")); break;
       case "library": openKnowledge("overview"); break;
@@ -970,6 +971,10 @@
   function openKnowledge(sub) {
     if (window.MOTKnowledgeUI) window.MOTKnowledgeUI.open(sub || "overview");
     else { showView("upload"); toast(t("phase.soon")); }
+  }
+  function openTemplates() {
+    if (window.MOTTemplatesUI) window.MOTTemplatesUI.open();
+    else openAdmin();
   }
   document.addEventListener("click", function (e) {
     var c = e.target.closest("[data-cmd]");
@@ -982,7 +987,7 @@
   var am = document.getElementById("adminMenuBtn");
   if (am) am.addEventListener("click", phaseToast);
   var tr = document.getElementById("tplReplaceBtn");
-  if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openAdmin(); });
+  if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openTemplates(); });
 
   // Bridge for the Reference Knowledge Center module
   window.MOTApp = { showView: showView, openKnowledge: openKnowledge, lang: function () { return lang; }, t: t };
