@@ -11,16 +11,17 @@
 
   var DB_NAME = "motKnowledgeDB";
   var STORE = "refbooks";
-  var VERSION = 1;
+  var STORE_C = "clauses";
+  var VERSION = 2;
 
   function openDB() {
     return new Promise(function (resolve, reject) {
       if (!global.indexedDB) { reject(new Error("NO_INDEXEDDB")); return; }
       var req = global.indexedDB.open(DB_NAME, VERSION);
       req.onupgradeneeded = function () {
-        if (!req.result.objectStoreNames.contains(STORE)) {
-          req.result.createObjectStore(STORE, { keyPath: "id" });
-        }
+        var db = req.result;
+        if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE, { keyPath: "id" });
+        if (!db.objectStoreNames.contains(STORE_C)) db.createObjectStore(STORE_C, { keyPath: "id" });
       };
       req.onsuccess = function () { resolve(req.result); };
       req.onerror = function () { reject(req.error); };
@@ -140,4 +141,117 @@
   };
 
   global.MOTKnowledge = API;
+
+  /* ===================== Clause Library ===================== */
+  function cAll() {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var rq = db.transaction(STORE_C, "readonly").objectStore(STORE_C).getAll();
+        rq.onsuccess = function () { resolve(rq.result || []); };
+        rq.onerror = function () { reject(rq.error); };
+      });
+    });
+  }
+  function cGet(cid) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var rq = db.transaction(STORE_C, "readonly").objectStore(STORE_C).get(cid);
+        rq.onsuccess = function () { resolve(rq.result || null); };
+        rq.onerror = function () { reject(rq.error); };
+      });
+    });
+  }
+  function cTx(mode, fn) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var t = db.transaction(STORE_C, mode); fn(t.objectStore(STORE_C));
+        t.oncomplete = function () { resolve(); }; t.onerror = function () { reject(t.error); };
+      });
+    });
+  }
+
+  var HIST_CTX = ["كراسة خدمات تقنية المعلومات المُدارة", "نطاق عمل الأمن السيبراني", "مواصفات المنصة السحابية", "مراجعة لجنة الحوكمة", "كراسة خدمات مُدارة"];
+  var CSEED = [
+    { title: "توافر النظام الشهري", category: "kpi", type: "mandatory", version: "V2", status: "active", usageCount: 21, updatedAgo: 12, approvedBy: "لجنة الحوكمة", tags: ["توافر", "KPI"], textAr: "يلتزم المورّد بتحقيق توافر شهري للنظام لا يقل عن 99.9%، ويُقاس شهريًا مع تطبيق غرامات عند الإخلال بالمستوى المتفق عليه.", textEn: "The supplier shall achieve a minimum monthly system availability of 99.9%, measured monthly, with service credits applied for any breach." },
+    { title: "مستويات خدمة الاستجابة للحوادث", category: "sla", type: "mandatory", version: "V1", status: "active", usageCount: 34, updatedAgo: 5, approvedBy: "إدارة تقنية المعلومات", tags: ["SLA", "حوادث"], textAr: "يلتزم المورّد بأزمنة استجابة متدرجة: الحوادث الحرجة (P1) استجابة خلال 15 دقيقة وحل خلال 4 ساعات، و(P2) استجابة خلال ساعة وحل خلال 8 ساعات.", textEn: "The supplier shall meet tiered response times: P1 response ≤ 15 min / resolution ≤ 4 h; P2 response ≤ 1 h / resolution ≤ 8 h." },
+    { title: "إطار الحوكمة والمراجعة الدورية", category: "governance", type: "recommended", version: "V1", status: "active", usageCount: 12, updatedAgo: 20, approvedBy: "لجنة الحوكمة", tags: ["حوكمة", "إشراف"], textAr: "تُعقد مراجعة خدمة شهرية تضم ممثلي الطرفين، مع مصفوفة تصعيد واضحة وأدوار ومسؤوليات محددة وتقارير التزام دورية.", textEn: "" },
+    { title: "الضوابط الأمنية الأساسية", category: "cyber", type: "mandatory", version: "V3", status: "active", usageCount: 28, updatedAgo: 3, approvedBy: "الأمن السيبراني", tags: ["أمن", "تشفير", "MFA"], textAr: "يلتزم المورّد بتطبيق المصادقة متعددة العوامل، وتشفير البيانات أثناء التخزين والنقل، والتحكم في الوصول حسب الأدوار، وتقييمات ثغرات ربع سنوية.", textEn: "The supplier shall implement multi-factor authentication, encryption at rest and in transit, role-based access control, and quarterly vulnerability assessments." },
+    { title: "المخرجات والتسليمات الدورية", category: "deliverables", type: "standard", version: "V1", status: "active", usageCount: 9, updatedAgo: 25, approvedBy: "إدارة المشاريع", tags: ["مخرجات"], textAr: "يقدّم المورّد خطة تنفيذ ومخرجات تشغيلية دورية وتقارير أداء شهرية وخطة خروج ونقل معرفة عند نهاية العقد.", textEn: "" },
+    { title: "معايير قبول المخرجات", category: "acceptance", type: "mandatory", version: "V2", status: "active", usageCount: 15, updatedAgo: 8, approvedBy: "لجنة الاستلام", tags: ["قبول", "اعتماد"], textAr: "لكل مخرج رئيسي معايير قبول قابلة للقياس وإجراء اعتماد وتوقيع رسمي قبل القبول النهائي، مع التحقق من استيفاء المتطلبات الفنية والأمنية.", textEn: "" },
+    { title: "إدارة المخاطر واستمرارية الأعمال", category: "risks", type: "recommended", version: "V1", status: "active", usageCount: 7, updatedAgo: 30, approvedBy: "إدارة المخاطر", tags: ["مخاطر"], textAr: "يحتفظ المورّد بسجل مخاطر محدّث مع إجراءات تخفيف وخطة استمرارية أعمال وخطة تعافٍ معتمدة.", textEn: "" },
+    { title: "توثيق الاعتماديات", category: "dependencies", type: "optional", version: "V1", status: "inactive", usageCount: 3, updatedAgo: 60, approvedBy: "إدارة التخطيط", tags: ["اعتماديات"], textAr: "يوثّق المورّد الاعتماديات على أنظمة الوزارة والاتفاقيات الإطارية القائمة وأي أطراف ثالثة ذات علاقة.", textEn: "" },
+    { title: "متطلبات الدعم والتشغيل", category: "support", type: "mandatory", version: "V2", status: "active", usageCount: 18, updatedAgo: 10, approvedBy: "إدارة تقنية المعلومات", tags: ["دعم", "تشغيل"], textAr: "دعم تشغيلي على مدار الساعة طوال أيام الأسبوع مع فريق مسمّى وأدوار ومسؤوليات واضحة وحضور ميداني عند الحاجة.", textEn: "" },
+    { title: "متطلبات الاستضافة السحابية", category: "cloud", type: "mandatory", version: "V1", status: "active", usageCount: 11, updatedAgo: 14, approvedBy: "الأمن السيبراني", tags: ["سحابة", "توطين"], textAr: "تلتزم الخدمات السحابية بمتطلبات توطين البيانات داخل المملكة والمعايير الأمنية المعتمدة وضوابط مزوّد الخدمة السحابية.", textEn: "" },
+    { title: "متطلبات مراكز الاستضافة", category: "hosting", type: "standard", version: "V1", status: "active", usageCount: 6, updatedAgo: 40, approvedBy: "إدارة البنية التحتية", tags: ["استضافة", "DR"], textAr: "تُستضاف الأنظمة في مراكز بيانات معتمدة مع خطة تعافٍ من الكوارث وأهداف زمنية محددة للاسترجاع (RTO/RPO).", textEn: "" },
+    { title: "متطلبات التقارير", category: "reporting", type: "standard", version: "V1", status: "active", usageCount: 8, updatedAgo: 18, approvedBy: "إدارة المشاريع", tags: ["تقارير"], textAr: "تقارير أداء شهرية وربع سنوية وفق قوالب معتمدة مع لوحات مؤشرات ومراجعة دورية مع الوزارة.", textEn: "" },
+    { title: "شروط الدفع", category: "payment", type: "mandatory", version: "V2", status: "active", usageCount: 14, updatedAgo: 9, approvedBy: "الإدارة المالية", tags: ["دفع", "ضمان"], textAr: "ترتبط الدفعات بتحقق المخرجات ومستويات الخدمة، مع احتجاز نسبة ضمان حتى القبول النهائي وإجراءات واضحة للاعتماد.", textEn: "" },
+    { title: "معايير تقييم العروض", category: "evaluation", type: "mandatory", version: "V1", status: "active", usageCount: 10, updatedAgo: 22, approvedBy: "لجنة المشتريات", tags: ["تقييم", "أوزان"], textAr: "تُقيّم العروض وفق معايير فنية ومالية معلنة مسبقًا مع أوزان محددة ومنهجية تقييم شفافة وموثّقة.", textEn: "" }
+  ];
+
+  function buildHistory(count, updatedAgo) {
+    var n = Math.min(3, Math.floor(count / 8) + (count > 0 ? 1 : 0));
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      out.push({ date: daysAgo(updatedAgo + i * 9 + 2), ctx: HIST_CTX[(i + count) % HIST_CTX.length] });
+    }
+    return out;
+  }
+  function ensureSeedC() {
+    return cAll().then(function (rows) {
+      if (rows && rows.length) return rows;
+      return cTx("readwrite", function (store) {
+        CSEED.forEach(function (s) {
+          store.add({
+            id: "cl_" + Math.random().toString(36).slice(2, 9), title: s.title, category: s.category,
+            type: s.type, textAr: s.textAr, textEn: s.textEn || "", version: s.version, status: s.status,
+            tags: s.tags || [], approvedBy: s.approvedBy || "", lastUpdated: daysAgo(s.updatedAgo),
+            usageCount: s.usageCount || 0, usageHistory: buildHistory(s.usageCount || 0, s.updatedAgo)
+          });
+        });
+      }).then(cAll);
+    });
+  }
+
+  var CLAUSES = {
+    init: function () { return ensureSeedC(); },
+    list: function () {
+      return ensureSeedC().then(function (rows) {
+        return rows.sort(function (a, b) { return (b.lastUpdated || "").localeCompare(a.lastUpdated || ""); });
+      });
+    },
+    get: cGet,
+    add: function (obj) {
+      var rec = Object.assign({
+        id: "cl_" + Math.random().toString(36).slice(2, 9), title: "", category: "kpi", type: "standard",
+        textAr: "", textEn: "", version: "V1", status: "active", tags: [], approvedBy: "",
+        lastUpdated: now(), usageCount: 0, usageHistory: []
+      }, obj || {});
+      rec.lastUpdated = now();
+      return cTx("readwrite", function (s) { s.add(rec); }).then(function () { return rec; });
+    },
+    update: function (cid, patch) {
+      return cGet(cid).then(function (rec) {
+        if (!rec) throw new Error("NOT_FOUND");
+        var next = Object.assign({}, rec, patch, { id: cid, lastUpdated: now() });
+        return cTx("readwrite", function (s) { s.put(next); }).then(function () { return next; });
+      });
+    },
+    remove: function (cid) { return cTx("readwrite", function (s) { s.delete(cid); }); },
+    setStatus: function (cid, status) {
+      return cGet(cid).then(function (rec) {
+        var next = Object.assign({}, rec, { status: status, lastUpdated: now() });
+        return cTx("readwrite", function (s) { s.put(next); }).then(function () { return next; });
+      });
+    },
+    addUsage: function (cid, ctx) {
+      return cGet(cid).then(function (rec) {
+        if (!rec) return null;
+        var hist = (rec.usageHistory || []).concat([{ date: now(), ctx: ctx || "" }]);
+        var next = Object.assign({}, rec, { usageCount: (rec.usageCount || 0) + 1, usageHistory: hist });
+        return cTx("readwrite", function (s) { s.put(next); }).then(function () { return next; });
+      });
+    }
+  };
+
+  global.MOTClauses = CLAUSES;
 })(window);

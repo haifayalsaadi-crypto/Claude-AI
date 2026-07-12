@@ -11,6 +11,8 @@
   var PTYPES = ["managed", "infra", "consulting", "analytics", "apps"];
   var CONF = ["public", "internal", "restricted", "confidential"];
   var STATUS = ["active", "inactive", "archived"];
+  var CCATS = ["kpi", "sla", "governance", "cyber", "deliverables", "acceptance", "risks", "dependencies", "support", "cloud", "hosting", "reporting", "payment", "evaluation"];
+  var CTYPES = ["mandatory", "recommended", "optional", "standard"];
 
   var K = {
     en: {
@@ -47,7 +49,23 @@
       dept: { cyber: "Cybersecurity", it: "Information Technology", tech: "Technology", planning: "Strategy & Planning", procurement: "Procurement" },
       ptype: { managed: "Managed services", infra: "Infrastructure", consulting: "Consulting", analytics: "Analytics", apps: "Applications" },
       conf: { public: "Public", internal: "Internal", restricted: "Restricted", confidential: "Confidential" },
-      status: { active: "Active", inactive: "Inactive", archived: "Archived" }
+      status: { active: "Active", inactive: "Inactive", archived: "Archived" },
+      nav_clauses: "Clause Library",
+      cl_add: "Add Clause", cl_edit: "Edit", cl_archive: "Archive", cl_restore: "Restore",
+      cl_preview: "Preview", cl_copy: "Copy", cl_history: "Usage history", cl_search: "Search clauses…",
+      clc_title: "Clause title", clc_cat: "Category", clc_type: "Type", clc_ver: "Version",
+      clc_status: "Status", clc_usage: "Usage count", clc_updated: "Last updated", clc_approved: "Approved by", clc_actions: "Actions",
+      clf_title: "Clause title", clf_cat: "Category", clf_type: "Clause type",
+      clf_ar: "Arabic text", clf_en: "English text (optional)", clf_ver: "Version",
+      clf_status: "Status", clf_tags: "Tags", clf_tags_ph: "comma,separated", clf_approved: "Approved by",
+      clf_approved_ph: "e.g. Governance Committee", clf_save: "Save clause", clf_saveEdit: "Save changes",
+      cl_empty: "No clauses match your filters.", cl_copied: "Clause copied to clipboard.",
+      cl_saved: "Clause added.", cl_updated: "Clause updated.", cl_archived_ok: "Clause archived.", cl_restored_ok: "Clause restored.",
+      cl_add_title: "Add clause", cl_edit_title: "Edit clause", cl_preview_title: "Clause preview",
+      cl_hist_title: "Usage history", cl_hist_empty: "No usage recorded yet.",
+      cl_en_none: "No English text provided.", cl_used: "Used", cl_times: "times",
+      ctype: { mandatory: "Mandatory", recommended: "Recommended", optional: "Optional", standard: "Standard" },
+      ccat: { kpi: "KPIs", sla: "SLA", governance: "Governance", cyber: "Cybersecurity", deliverables: "Deliverables", acceptance: "Acceptance Criteria", risks: "Risks", dependencies: "Dependencies", support: "Support Requirements", cloud: "Cloud Requirements", hosting: "Hosting Requirements", reporting: "Reporting Requirements", payment: "Payment Terms", evaluation: "Evaluation Criteria" }
     },
     ar: {
       title: "مركز المعرفة المرجعية",
@@ -83,7 +101,23 @@
       dept: { cyber: "الأمن السيبراني", it: "تقنية المعلومات", tech: "التقنية", planning: "الاستراتيجية والتخطيط", procurement: "المشتريات" },
       ptype: { managed: "خدمات مُدارة", infra: "بنية تحتية", consulting: "استشارات", analytics: "تحليلات", apps: "تطبيقات" },
       conf: { public: "عام", internal: "داخلي", restricted: "مقيّد", confidential: "سري" },
-      status: { active: "نشطة", inactive: "غير نشطة", archived: "مؤرشفة" }
+      status: { active: "نشطة", inactive: "غير نشطة", archived: "مؤرشفة" },
+      nav_clauses: "مكتبة البنود",
+      cl_add: "إضافة بند", cl_edit: "تعديل", cl_archive: "أرشفة", cl_restore: "استعادة",
+      cl_preview: "معاينة", cl_copy: "نسخ", cl_history: "سجل الاستخدام", cl_search: "ابحث في البنود…",
+      clc_title: "عنوان البند", clc_cat: "التصنيف", clc_type: "النوع", clc_ver: "الإصدار",
+      clc_status: "الحالة", clc_usage: "عدد الاستخدام", clc_updated: "آخر تحديث", clc_approved: "معتمد من", clc_actions: "إجراءات",
+      clf_title: "عنوان البند", clf_cat: "التصنيف", clf_type: "نوع البند",
+      clf_ar: "النص العربي", clf_en: "النص الإنجليزي (اختياري)", clf_ver: "الإصدار",
+      clf_status: "الحالة", clf_tags: "الوسوم", clf_tags_ph: "وسوم،مفصولة،بفواصل", clf_approved: "معتمد من",
+      clf_approved_ph: "مثال: لجنة الحوكمة", clf_save: "حفظ البند", clf_saveEdit: "حفظ التغييرات",
+      cl_empty: "لا توجد بنود مطابقة للتصفية.", cl_copied: "تم نسخ البند إلى الحافظة.",
+      cl_saved: "تمت إضافة البند.", cl_updated: "تم تحديث البند.", cl_archived_ok: "تمت أرشفة البند.", cl_restored_ok: "تمت استعادة البند.",
+      cl_add_title: "إضافة بند", cl_edit_title: "تعديل بند", cl_preview_title: "معاينة البند",
+      cl_hist_title: "سجل الاستخدام", cl_hist_empty: "لا يوجد استخدام مُسجّل بعد.",
+      cl_en_none: "لا يوجد نص إنجليزي.", cl_used: "استُخدم", cl_times: "مرة",
+      ctype: { mandatory: "إلزامي", recommended: "موصى به", optional: "اختياري", standard: "قياسي" },
+      ccat: { kpi: "مؤشرات الأداء", sla: "اتفاقيات مستوى الخدمة", governance: "الحوكمة", cyber: "الأمن السيبراني", deliverables: "المخرجات", acceptance: "معايير القبول", risks: "المخاطر", dependencies: "الاعتماديات", support: "متطلبات الدعم", cloud: "المتطلبات السحابية", hosting: "متطلبات الاستضافة", reporting: "متطلبات التقارير", payment: "شروط الدفع", evaluation: "معايير التقييم" }
     }
   };
 
@@ -102,7 +136,8 @@
     clearTimeout(el._t); el._t = setTimeout(function () { el.classList.remove("show"); }, 2600);
   }
 
-  var state = { sub: "overview", editId: null, replaceId: null, filterCat: "all", filterStatus: "all", q: "" };
+  var state = { sub: "overview", editId: null, replaceId: null, filterCat: "all", filterStatus: "all", q: "",
+                clQ: "", clCat: "all", clStatus: "all", clEditId: null };
 
   function optionList(list, kind, sel) {
     return list.map(function (c) { return '<option value="' + c + '"' + (c === sel ? " selected" : "") + '>' + esc(L(kind, c)) + "</option>"; }).join("");
@@ -112,7 +147,7 @@
   function renderShell() {
     var root = document.getElementById("view-knowledge");
     if (!root) return;
-    var navItems = [["overview", "nav_overview"], ["books", "nav_books"], ["categories", "nav_categories"], ["upload", "nav_upload"], ["analytics", "nav_analytics"]];
+    var navItems = [["overview", "nav_overview"], ["books", "nav_books"], ["clauses", "nav_clauses"], ["categories", "nav_categories"], ["upload", "nav_upload"], ["analytics", "nav_analytics"]];
     root.innerHTML =
       '<div class="kc">' +
         '<div class="kc-head">' +
@@ -127,7 +162,8 @@
         }).join("") + "</nav>" +
         '<div id="kc-body"></div>' +
       "</div>" +
-      '<input type="file" id="kcReplaceInput" accept=".pdf,.docx" hidden />';
+      '<input type="file" id="kcReplaceInput" accept=".pdf,.docx" hidden />' +
+      '<div class="modal-overlay" id="kcModal" hidden><div class="modal" id="kcModalInner"></div></div>';
     renderBody();
   }
 
@@ -135,7 +171,7 @@
 
   function renderBody() {
     var body = document.getElementById("kc-body"); if (!body) return;
-    var map = { overview: renderOverview, books: renderBooks, categories: renderCategories, upload: renderUpload, analytics: renderAnalytics, details: renderDetails };
+    var map = { overview: renderOverview, books: renderBooks, clauses: renderClauses, categories: renderCategories, upload: renderUpload, analytics: renderAnalytics, details: renderDetails };
     (map[state.sub] || renderOverview)(body);
   }
 
@@ -328,6 +364,145 @@
     });
   }
 
+  /* ---------------- Clause Library ---------------- */
+  function openModal(html) {
+    var inner = document.getElementById("kcModalInner"); if (!inner) return;
+    inner.innerHTML = html;
+    document.getElementById("kcModal").hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal() {
+    var m = document.getElementById("kcModal"); if (m) m.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  function clauseActions(c) {
+    var archived = c.status === "archived";
+    var items = [["preview", "cl_preview", "⌕"], ["copy", "cl_copy", "⧉"], ["edit", "cl_edit", "✎"],
+      [archived ? "restore" : "archive", archived ? "cl_restore" : "cl_archive", archived ? "▲" : "▢"], ["history", "cl_history", "≡"]];
+    return '<div class="kc-actions">' + items.map(function (it) {
+      return '<button class="kc-actbtn" data-cl-act="' + it[0] + '" data-id="' + c.id + '" title="' + esc(t(it[1])) + '" aria-label="' + esc(t(it[1])) + '">' + it[2] + "</button>";
+    }).join("") + "</div>";
+  }
+
+  function renderClauses(body) {
+    MOTClauses.list().then(function (rows) {
+      var filtered = rows.filter(function (c) {
+        if (state.clCat !== "all" && c.category !== state.clCat) return false;
+        if (state.clStatus !== "all" && c.status !== state.clStatus) return false;
+        if (state.clQ) {
+          var hay = (c.title + " " + (c.tags || []).join(" ") + " " + (c.textAr || "") + " " + (c.textEn || "")).toLowerCase();
+          if (hay.indexOf(state.clQ.toLowerCase()) === -1) return false;
+        }
+        return true;
+      });
+      var cols = ["clc_title", "clc_cat", "clc_type", "clc_ver", "clc_status", "clc_usage", "clc_updated", "clc_approved", "clc_actions"];
+      var rowsHtml = filtered.map(function (c) {
+        return "<tr>" +
+          '<td class="kc-td-name"><button class="kc-linkbtn" data-cl-act="preview" data-id="' + c.id + '">' + esc(c.title) + "</button></td>" +
+          "<td>" + esc(L("ccat", c.category)) + "</td>" +
+          "<td>" + esc(L("ctype", c.type)) + "</td>" +
+          "<td>" + esc(c.version) + "</td>" +
+          '<td><span class="kc-badge st-' + c.status + '">' + esc(L("status", c.status)) + "</span></td>" +
+          '<td class="kc-td-used">' + esc(c.usageCount || 0) + "</td>" +
+          "<td>" + fmtDate(c.lastUpdated) + "</td>" +
+          "<td>" + esc(c.approvedBy || "—") + "</td>" +
+          "<td>" + clauseActions(c) + "</td>" +
+        "</tr>";
+      }).join("");
+      body.innerHTML =
+        '<div class="kc-toolbar">' +
+          '<div class="lib-search kc-search"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+            '<input type="search" id="clSearch" placeholder="' + esc(t("cl_search")) + '" value="' + esc(state.clQ) + '" /></div>' +
+          '<select id="clFilterCat" class="kc-select"><option value="all">' + esc(t("all_cats")) + "</option>" + optionList(CCATS, "ccat", state.clCat === "all" ? "" : state.clCat) + "</select>" +
+          '<select id="clFilterStatus" class="kc-select"><option value="all">' + esc(t("all_status")) + "</option>" + optionList(STATUS, "status", state.clStatus === "all" ? "" : state.clStatus) + "</select>" +
+          '<button class="btn btn-primary btn-sm" data-cl-add>＋ ' + esc(t("cl_add")) + "</button>" +
+        "</div>" +
+        '<div class="kc-tablewrap"><table class="kc-table"><thead><tr>' +
+          cols.map(function (c) { return "<th>" + esc(t(c)) + "</th>"; }).join("") +
+        "</tr></thead><tbody>" +
+        (rowsHtml || '<tr><td colspan="9" class="kc-empty">' + esc(t("cl_empty")) + "</td></tr>") +
+        "</tbody></table></div>";
+    });
+  }
+
+  function clauseForm(c) {
+    var editing = !!c; c = c || {};
+    var html =
+      '<div class="modal-head"><h2>' + esc(editing ? t("cl_edit_title") : t("cl_add_title")) + '</h2><button class="modal-close" data-kc-modal-close aria-label="Close">×</button></div>' +
+      '<div class="modal-body"><form id="clForm" class="kc-form kc-form-flat" novalidate>' +
+        field("clf-title", "clf_title", '<input id="clf-title" type="text" value="' + esc(c.title || "") + '" required />') +
+        '<div class="kc-form-row">' +
+          field("clf-cat", "clf_cat", '<select id="clf-cat">' + optionList(CCATS, "ccat", c.category || "kpi") + "</select>") +
+          field("clf-type", "clf_type", '<select id="clf-type">' + optionList(CTYPES, "ctype", c.type || "standard") + "</select>") +
+        "</div>" +
+        field("clf-ar", "clf_ar", '<textarea id="clf-ar" rows="4" dir="rtl">' + esc(c.textAr || "") + "</textarea>") +
+        field("clf-en", "clf_en", '<textarea id="clf-en" rows="3" dir="ltr">' + esc(c.textEn || "") + "</textarea>") +
+        '<div class="kc-form-row">' +
+          field("clf-ver", "clf_ver", '<input id="clf-ver" type="text" value="' + esc(c.version || "V1") + '" />') +
+          field("clf-status", "clf_status", '<select id="clf-status">' + optionList(STATUS, "status", c.status || "active") + "</select>") +
+        "</div>" +
+        '<div class="kc-form-row">' +
+          field("clf-tags", "clf_tags", '<input id="clf-tags" type="text" placeholder="' + esc(t("clf_tags_ph")) + '" value="' + esc((c.tags || []).join("، ")) + '" />') +
+          field("clf-approved", "clf_approved", '<input id="clf-approved" type="text" placeholder="' + esc(t("clf_approved_ph")) + '" value="' + esc(c.approvedBy || "") + '" />') +
+        "</div>" +
+        '<div class="kc-form-actions"><button type="submit" class="btn btn-primary">' + esc(editing ? t("clf_saveEdit") : t("clf_save")) + '</button><button type="button" class="btn btn-ghost" data-kc-modal-close>' + esc(t("f_cancel")) + "</button></div>" +
+      "</form></div>";
+    state.clEditId = editing ? c.id : null;
+    openModal(html);
+  }
+
+  function clausePreview(c) {
+    var html =
+      '<div class="modal-head"><h2>' + esc(t("cl_preview_title")) + '</h2><button class="modal-close" data-kc-modal-close aria-label="Close">×</button></div>' +
+      '<div class="modal-body">' +
+        '<h3 class="cl-prev-title">' + esc(c.title) + "</h3>" +
+        '<div class="cl-prev-meta"><span class="kc-badge st-' + c.status + '">' + esc(L("status", c.status)) + "</span>" +
+          '<span class="chip">' + esc(L("ccat", c.category)) + '</span><span class="chip">' + esc(L("ctype", c.type)) + '</span><span class="chip">' + esc(c.version) + "</span></div>" +
+        '<div class="cl-text" dir="rtl">' + esc(c.textAr || "—") + "</div>" +
+        (c.textEn ? '<div class="cl-text cl-text-en" dir="ltr">' + esc(c.textEn) + "</div>" : '<p class="muted">' + esc(t("cl_en_none")) + "</p>") +
+        '<div class="chips">' + (c.tags || []).map(function (k) { return '<span class="chip">' + esc(k) + "</span>"; }).join("") + "</div>" +
+        '<p class="muted cl-prev-foot">' + esc(t("clc_approved")) + ": " + esc(c.approvedBy || "—") + " · " + esc(t("clc_updated")) + ": " + fmtDate(c.lastUpdated) + " · " + esc(t("cl_used")) + " " + (c.usageCount || 0) + " " + esc(t("cl_times")) + "</p>" +
+        '<div class="kc-form-actions"><button class="btn btn-primary" data-cl-act="copy" data-id="' + c.id + '">' + esc(t("cl_copy")) + '</button><button class="btn btn-ghost" data-cl-act="edit" data-id="' + c.id + '">' + esc(t("cl_edit")) + '</button><button class="btn btn-ghost" data-kc-modal-close>' + esc(t("f_cancel")) + "</button></div>" +
+      "</div>";
+    openModal(html);
+  }
+
+  function clauseHistory(c) {
+    var h = (c.usageHistory || []);
+    var list = h.length ? h.slice().reverse().map(function (e) {
+      return '<li class="cl-hist-i"><span class="rl-ico">≡</span><span class="kc-recent-m"><span class="kc-recent-t">' + esc(e.ctx || "—") + '</span><span class="kc-recent-d">' + fmtDate(e.date) + "</span></span></li>";
+    }).join("") : '<li class="muted cl-hist-empty">' + esc(t("cl_hist_empty")) + "</li>";
+    openModal('<div class="modal-head"><h2>' + esc(t("cl_hist_title")) + "</h2><button class=\"modal-close\" data-kc-modal-close aria-label=\"Close\">×</button></div>" +
+      '<div class="modal-body"><p class="muted">' + esc(c.title) + '</p><ul class="cl-hist">' + list + "</ul></div>");
+  }
+
+  function copyClause(c) {
+    var text = c.textAr + (c.textEn ? ("\n\n" + c.textEn) : "");
+    var done = function () { MOTClauses.addUsage(c.id, lang() === "ar" ? "نسخ يدوي" : "Manual copy").then(function () { toast(t("cl_copied")); if (state.sub === "clauses") renderBody(); }); };
+    try {
+      if (global.navigator && global.navigator.clipboard && global.navigator.clipboard.writeText) {
+        global.navigator.clipboard.writeText(text).then(done, done); return;
+      }
+    } catch (e) {}
+    try { var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); } catch (e) {}
+    done();
+  }
+
+  function handleClause(act, cid) {
+    MOTClauses.get(cid).then(function (c) {
+      if (!c) return;
+      switch (act) {
+        case "preview": clausePreview(c); break;
+        case "edit": clauseForm(c); break;
+        case "copy": copyClause(c); break;
+        case "history": clauseHistory(c); break;
+        case "archive": MOTClauses.setStatus(cid, "archived").then(function () { toast(t("cl_archived_ok")); closeModal(); renderBody(); }); break;
+        case "restore": MOTClauses.setStatus(cid, "active").then(function () { toast(t("cl_restored_ok")); closeModal(); renderBody(); }); break;
+      }
+    });
+  }
+
   /* ---------------- file helpers ---------------- */
   function saveBlob(blob, filename) {
     var url = URL.createObjectURL(blob); var a = document.createElement("a");
@@ -373,6 +548,11 @@
     if (open) { state.editId = open.getAttribute("data-kc-open"); setSub("details"); return; }
     var catc = e.target.closest("[data-kc-cat]");
     if (catc) { state.filterCat = catc.getAttribute("data-kc-cat"); setSub("books"); return; }
+    if (e.target.closest("[data-cl-add]")) { clauseForm(null); return; }
+    if (e.target.closest("[data-kc-modal-close]")) { closeModal(); return; }
+    if (e.target.id === "kcModal") { closeModal(); return; }
+    var clAct = e.target.closest("[data-cl-act]");
+    if (clAct) { e.preventDefault(); handleClause(clAct.getAttribute("data-cl-act"), clAct.getAttribute("data-id")); return; }
     var act = e.target.closest("[data-kc-act]");
     if (act) { e.preventDefault(); handleAct(act.getAttribute("data-kc-act"), act.getAttribute("data-id")); closeMenus(); return; }
     var mbtn = e.target.closest(".kc-menu-btn");
@@ -382,11 +562,14 @@
   function closeMenus() { Array.prototype.forEach.call(document.querySelectorAll(".kc-menu.open"), function (m) { m.classList.remove("open"); }); }
 
   document.addEventListener("input", function (e) {
-    if (e.target.id === "kcSearch") { state.q = e.target.value; renderBooks(document.getElementById("kc-body")); restoreSearchFocus(); }
+    if (e.target.id === "kcSearch") { state.q = e.target.value; renderBooks(document.getElementById("kc-body")); focusEnd("kcSearch"); }
+    if (e.target.id === "clSearch") { state.clQ = e.target.value; renderClauses(document.getElementById("kc-body")); focusEnd("clSearch"); }
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "kcFilterCat") { state.filterCat = e.target.value; renderBooks(document.getElementById("kc-body")); }
     if (e.target.id === "kcFilterStatus") { state.filterStatus = e.target.value; renderBooks(document.getElementById("kc-body")); }
+    if (e.target.id === "clFilterCat") { state.clCat = e.target.value; renderClauses(document.getElementById("kc-body")); }
+    if (e.target.id === "clFilterStatus") { state.clStatus = e.target.value; renderClauses(document.getElementById("kc-body")); }
     if (e.target.id === "kcReplaceInput" && e.target.files && e.target.files[0] && state.replaceId) {
       var f = e.target.files[0]; e.target.value = "";
       MOTKnowledge.update(state.replaceId, { fileBlob: f, fileName: f.name, fileType: f.type, hasFile: true, lastIndexed: new Date().toISOString() })
@@ -394,9 +577,19 @@
       state.replaceId = null;
     }
   });
-  function restoreSearchFocus() { var s = document.getElementById("kcSearch"); if (s) { s.focus(); var v = s.value; s.value = ""; s.value = v; } }
+  function focusEnd(id) { var s = document.getElementById(id); if (s) { s.focus(); var v = s.value; s.value = ""; s.value = v; } }
 
   document.addEventListener("submit", function (e) {
+    if (e.target.id === "clForm") {
+      e.preventDefault();
+      var gc = function (id) { var el = document.getElementById(id); return el ? el.value : ""; };
+      var ctitle = gc("clf-title").trim(); if (!ctitle) { toast(t("f_req")); return; }
+      var ctags = gc("clf-tags").split(/[،,]/).map(function (s) { return s.trim(); }).filter(Boolean);
+      var cdata = { title: ctitle, category: gc("clf-cat"), type: gc("clf-type"), textAr: gc("clf-ar"), textEn: gc("clf-en"), version: gc("clf-ver") || "V1", status: gc("clf-status"), tags: ctags, approvedBy: gc("clf-approved") };
+      var cp = state.clEditId ? MOTClauses.update(state.clEditId, cdata) : MOTClauses.add(cdata);
+      cp.then(function () { toast(state.clEditId ? t("cl_updated") : t("cl_saved")); state.clEditId = null; closeModal(); renderBody(); });
+      return;
+    }
     if (e.target.id !== "kcForm") return;
     e.preventDefault();
     var g = function (id) { var el = document.getElementById(id); return el ? el.value : ""; };
