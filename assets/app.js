@@ -55,6 +55,12 @@
       "create.name": "Specification title", "create.namePh": "e.g. Managed Cloud Services",
       "create.cat": "Category", "create.tpl": "Approved template",
       "create.generate": "Generate specification",
+      "btn.downloadnew": "Download new document",
+      "pf.desc": "Project description", "pf.scope": "Scope", "pf.objectives": "Objectives",
+      "pf.deliverables": "Deliverables", "pf.kpis": "KPIs", "pf.acceptance": "Acceptance criteria",
+      "pf.timeline": "Timeline", "pf.support": "Support model", "pf.governance": "Governance",
+      "pf.security": "Security requirements", "pf.risks": "Risks", "pf.dependencies": "Dependencies",
+      "pf.pricing": "Pricing / payment structure",
       "res.eyebrow": "Results", "res.title": "AI results",
       "tab.overview": "Overview", "tab.improvements": "AI Improvements",
       "tab.differences": "Differences", "tab.references": "Knowledge References",
@@ -220,6 +226,12 @@
       "create.name": "عنوان الكراسة", "create.namePh": "مثال: خدمات سحابية مُدارة",
       "create.cat": "التصنيف", "create.tpl": "القالب المعتمد",
       "create.generate": "إنشاء الكراسة",
+      "btn.downloadnew": "تنزيل المستند الجديد",
+      "pf.desc": "وصف المشروع", "pf.scope": "نطاق العمل", "pf.objectives": "الأهداف",
+      "pf.deliverables": "المخرجات", "pf.kpis": "مؤشرات الأداء", "pf.acceptance": "معايير القبول",
+      "pf.timeline": "الجدول الزمني", "pf.support": "نموذج الدعم", "pf.governance": "الحوكمة",
+      "pf.security": "المتطلبات الأمنية", "pf.risks": "المخاطر", "pf.dependencies": "الاعتماديات",
+      "pf.pricing": "التسعير / هيكل الدفع",
       "res.eyebrow": "النتائج", "res.title": "نتائج الذكاء الاصطناعي",
       "tab.overview": "نظرة عامة", "tab.improvements": "تحسينات الذكاء الاصطناعي",
       "tab.differences": "الفروقات", "tab.references": "المراجع المعرفية",
@@ -503,6 +515,7 @@
     if (analysed) { buildFindings(currentFilter); buildDiff(); if (lastRag) renderRag(lastRag); }
     updateFilterCounts();
     if (dashReady) updateDashboard();
+    updateDownloadLabel();
     try { document.dispatchEvent(new CustomEvent("mot:langchange", { detail: { lang: lang } })); } catch (e) {}
   }
 
@@ -584,7 +597,8 @@
         setTimeout(() => {
           startAnalysisDoc({
             name: { en: file.name, ar: file.name },
-            score: 57, from: 57, to: 85
+            score: 57, from: 57, to: 85, type: "SOW", catKey: "rcat.managed", refs: 7,
+            mode: "improve", fileBlob: file, fileName: file.name
           });
         }, 950);
       }
@@ -612,7 +626,7 @@
     };
     setTimeout(tick, 400);
   }
-  function startAnalysisSample(key) { activeSample = SAMPLES[key]; runAnalysing(); }
+  function startAnalysisSample(key) { activeSample = Object.assign({}, SAMPLES[key], { mode: "improve" }); runAnalysing(); }
   function startAnalysisDoc(obj) { activeSample = obj; runAnalysing(); }
 
   function finishAnalysis() {
@@ -625,6 +639,7 @@
     buildFindings("all");
     buildDiff();
     runRag();
+    updateDownloadLabel();
     showResults("overview");
   }
 
@@ -806,9 +821,16 @@
   if (cg) cg.addEventListener("click", function () {
     var nameEl = document.getElementById("createName");
     var catEl = document.getElementById("createCat");
-    var nm = (nameEl && nameEl.value.trim()) || (lang === "ar" ? "كراسة مواصفات جديدة" : "New Specification Book");
+    var gv = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; };
+    var nm = gv("createName") || (lang === "ar" ? "كراسة مواصفات جديدة" : "New Specification Book");
     var catKey = (catEl && catEl.value) || "rcat.managed";
-    startAnalysisDoc({ name: { en: nm, ar: nm }, score: 64, from: 64, to: 90, type: "SPEC", pages: 0, catKey: catKey, refs: 8 });
+    var project = {
+      name: nm, desc: gv("createDesc"), scope: gv("createScope"), objectives: gv("createObjectives"),
+      deliverables: gv("createDeliverables"), kpis: gv("createKpis"), acceptance: gv("createAcceptance"),
+      timeline: gv("createTimeline"), support: gv("createSupport"), governance: gv("createGovernance"),
+      security: gv("createSecurity"), risks: gv("createRisks"), dependencies: gv("createDependencies"), pricing: gv("createPricing")
+    };
+    startAnalysisDoc({ name: { en: nm, ar: nm }, score: 64, from: 64, to: 90, type: "SPEC", pages: 0, catKey: catKey, refs: 8, mode: "create", project: project });
   });
 
   // upload interactions
@@ -884,18 +906,77 @@
     setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500);
   }
 
+  function updateDownloadLabel() {
+    var b = document.getElementById("downloadBtn"); if (!b) return;
+    b.textContent = t((activeSample && activeSample.mode === "create") ? "btn.downloadnew" : "btn.download");
+  }
+  function getCreateTemplateBuffer() {
+    if (window.MOTTemplates) {
+      return window.MOTTemplates.getCurrent().then(function (cur) {
+        if (cur && cur.hasFile && cur.fileBlob && cur.fileBlob.arrayBuffer) return cur.fileBlob.arrayBuffer();
+        return window.MOTTemplate.getActiveBuffer();
+      });
+    }
+    return window.MOTTemplate.getActiveBuffer();
+  }
+  function buildProjectMap() {
+    var pj = (activeSample && activeSample.project) || {};
+    var v = function (k, d) { return (pj[k] && String(pj[k]).trim()) ? String(pj[k]).trim() : (d || ""); };
+    return {
+      ProjectName: v("name", (activeSample && activeSample.name && activeSample.name.ar) || "كراسة مواصفات جديدة"),
+      InitiativeName: v("desc", ""), Scope: v("scope", ""), Objectives: v("objectives", ""),
+      Deliverables: v("deliverables", ""), KPIs: v("kpis", ""), SLAs: "", AcceptanceCriteria: v("acceptance", ""),
+      Timeline: v("timeline", ""), SupportModel: v("support", ""), SecurityRequirements: v("security", ""),
+      Governance: v("governance", ""), Assumptions: "", Risks: v("risks", ""), Dependencies: v("dependencies", ""), Pricing: v("pricing", "")
+    };
+  }
+  function buildImprovementParas() {
+    var m = buildContentMap();
+    var H = function (x) { return { text: x, heading: true }; };
+    var P = function (x) { return { text: x, heading: false }; };
+    return [
+      H("التحسينات والإضافات المقترحة بواسطة الذكاء الاصطناعي"),
+      P("أُضيف هذا القسم إلى المستند الأصلي دون تغيير بنيته أو تنسيقه أو جداوله، ويعرض التحسينات والعناصر المفقودة المقترحة."),
+      H("نطاق العمل (محسّن)"), P(m.Scope),
+      H("الأهداف"), P(m.Objectives),
+      H("المخرجات والتسليمات"), P(m.Deliverables),
+      H("مؤشرات الأداء (مضافة)"), P(m.KPIs),
+      H("اتفاقيات مستوى الخدمة (مضافة)"), P(m.SLAs),
+      H("معايير القبول (مضافة)"), P(m.AcceptanceCriteria),
+      H("الحوكمة والإشراف (محسّنة)"), P(m.Governance),
+      H("المتطلبات الأمنية (محسّنة)"), P(m.SecurityRequirements)
+    ];
+  }
+  function buildImprovedBlob() {
+    var s = activeSample || SAMPLES.it;
+    var paras = buildImprovementParas();
+    var fname = (s.fileName || (s.name && s.name.en) || "");
+    if (s.fileBlob && /\.docx$/i.test(fname) && s.fileBlob.arrayBuffer) {
+      // preserve the ORIGINAL uploaded document; append the improvements
+      return s.fileBlob.arrayBuffer().then(function (buf) { return window.MOTDoc.appendToDocx(buf, paras); });
+    }
+    // no editable .docx (sample or PDF): produce an improved Word doc from scratch (never the template)
+    var title = (s.name && (s.name.ar || s.name.en)) || "المستند المُحسّن";
+    var blocks = [{ type: "title", text: title + " — نسخة محسّنة" }].concat(paras.map(function (p) { return { type: p.heading ? "heading" : "para", text: p.text }; }));
+    return Promise.resolve(window.MOTDoc.newDocx(blocks));
+  }
   function downloadImprovedDocx() {
     var btn = $("#downloadBtn");
-    if (!window.MOTTemplate || !window.PizZip || !(window.docxtemplater || window.Docxtemplater)) { toast(t("err.libs")); return; }
+    if (!window.MOTDoc || !window.PizZip) { toast(t("err.libs")); return; }
+    var isCreate = !!(activeSample && activeSample.mode === "create");
+    if (isCreate && !(window.docxtemplater || window.Docxtemplater)) { toast(t("err.libs")); return; }
     var orig = btn.textContent; btn.disabled = true; btn.textContent = t("gen.docx");
-    window.MOTTemplate.renderDocx(buildContentMap()).then(function (blob) {
-      if (!blob || blob.size < 1000) throw new Error("EMPTY");
-      saveBlob(blob, "الكراسة_المحسنة.docx");
+    var task = isCreate
+      ? getCreateTemplateBuffer().then(function (buf) { return window.MOTDoc.renderTemplate(buf, buildProjectMap()); })
+      : buildImprovedBlob();
+    task.then(function (blob) {
+      if (!blob || blob.size < 700) throw new Error("EMPTY");
+      saveBlob(blob, isCreate ? "الكراسة_الجديدة.docx" : "الكراسة_المحسنة.docx");
       toast(t("done.docx"));
     }).catch(function (e) {
       var msg = (e && e.message === "DEFAULT_TEMPLATE_MISSING") ? t("err.template") : t("err.docx");
       toast(msg); if (window.console) console.error("DOCX error:", e);
-    }).then(function () { btn.disabled = false; btn.textContent = orig; });
+    }).then(function () { btn.disabled = false; updateDownloadLabel(); });
   }
 
   function buildReportNode() {

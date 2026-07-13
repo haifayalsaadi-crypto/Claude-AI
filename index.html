@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="rag-engine-v12" />
+<meta name="x-build" content="doc-engine-v13" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -322,12 +322,8 @@
           <p class="muted" data-i18n="create.sub">Generate a new Ministry specification from the approved template and the reference library.</p>
         </div>
         <div class="create-form">
-          <label class="cf-field">
-            <span data-i18n="create.name">Specification title</span>
-            <input id="createName" type="text" data-i18n-ph="create.namePh" placeholder="e.g. Managed Cloud Services" />
-          </label>
-          <label class="cf-field">
-            <span data-i18n="create.cat">Category</span>
+          <label class="cf-field"><span data-i18n="create.name">Project name</span><input id="createName" type="text" data-i18n-ph="create.namePh" placeholder="e.g. Managed Cloud Services" /></label>
+          <label class="cf-field"><span data-i18n="create.cat">Category</span>
             <select id="createCat">
               <option value="rcat.cyber" data-i18n="rcat.cyber">Cybersecurity</option>
               <option value="rcat.digital" data-i18n="rcat.digital">Digital Transformation</option>
@@ -337,10 +333,20 @@
               <option value="rcat.apps" data-i18n="rcat.apps">Applications &amp; Systems</option>
             </select>
           </label>
-          <div class="cf-tpl">
-            <span class="cf-tpl-l" data-i18n="create.tpl">Approved template</span>
-            <b>Specification Template V3</b>
-          </div>
+          <label class="cf-field cf-wide"><span data-i18n="pf.desc">Project description</span><textarea id="createDesc" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.scope">Scope</span><textarea id="createScope" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.objectives">Objectives</span><textarea id="createObjectives" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.deliverables">Deliverables</span><textarea id="createDeliverables" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.kpis">KPIs</span><textarea id="createKpis" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.acceptance">Acceptance criteria</span><textarea id="createAcceptance" rows="2"></textarea></label>
+          <label class="cf-field"><span data-i18n="pf.timeline">Timeline</span><input id="createTimeline" type="text" /></label>
+          <label class="cf-field"><span data-i18n="pf.support">Support model</span><input id="createSupport" type="text" /></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.governance">Governance</span><textarea id="createGovernance" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.security">Security requirements</span><textarea id="createSecurity" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.risks">Risks</span><textarea id="createRisks" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.dependencies">Dependencies</span><textarea id="createDependencies" rows="2"></textarea></label>
+          <label class="cf-field cf-wide"><span data-i18n="pf.pricing">Pricing / payment structure</span><textarea id="createPricing" rows="2"></textarea></label>
+          <div class="cf-tpl cf-wide"><span class="cf-tpl-l" data-i18n="create.tpl">Approved template</span><b id="createTplName">Specification Template V3</b></div>
         </div>
         <button type="button" class="btn btn-primary" id="createGenBtn" data-i18n="create.generate">Generate specification</button>
       </div>
@@ -400,7 +406,7 @@
           <p class="muted" id="resDocName">—</p>
         </div>
         <div class="results-actions">
-          <button class="btn btn-primary" id="downloadBtn" data-i18n="btn.download">Download improved version</button>
+          <button class="btn btn-primary" id="downloadBtn">Download improved version</button>
           <button class="btn btn-ghost" id="exportReport" data-i18n="btn.export">Export report (PDF)</button>
           <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.review">Review another document</button>
         </div>
@@ -549,6 +555,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="assets/template-engine.js"></script>
+  <script src="assets/doc-engine.js"></script>
   <script src="assets/knowledge-center.js"></script>
   <script src="assets/rag-engine.js"></script>
   <script src="assets/knowledge-ui.js"></script>
