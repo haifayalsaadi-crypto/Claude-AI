@@ -13,7 +13,8 @@
   var STORE = "refbooks";
   var STORE_C = "clauses";
   var STORE_T = "templates";
-  var VERSION = 3;
+  var STORE_V = "vectors";
+  var VERSION = 4;
 
   function openDB() {
     return new Promise(function (resolve, reject) {
@@ -24,6 +25,7 @@
         if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE, { keyPath: "id" });
         if (!db.objectStoreNames.contains(STORE_C)) db.createObjectStore(STORE_C, { keyPath: "id" });
         if (!db.objectStoreNames.contains(STORE_T)) db.createObjectStore(STORE_T, { keyPath: "id" });
+        if (!db.objectStoreNames.contains(STORE_V)) db.createObjectStore(STORE_V, { keyPath: "id" });
       };
       req.onsuccess = function () { resolve(req.result); };
       req.onerror = function () { reject(req.error); };
@@ -344,4 +346,30 @@
   };
 
   global.MOTTemplates = TEMPLATES;
+
+  /* ===================== Vector store (for the RAG engine) ===================== */
+  var VEC = {
+    all: function () {
+      return openDB().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var rq = db.transaction(STORE_V, "readonly").objectStore(STORE_V).getAll();
+          rq.onsuccess = function () { resolve(rq.result || []); };
+          rq.onerror = function () { reject(rq.error); };
+        });
+      });
+    },
+    get: function (vid) {
+      return openDB().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var rq = db.transaction(STORE_V, "readonly").objectStore(STORE_V).get(vid);
+          rq.onsuccess = function () { resolve(rq.result || null); };
+          rq.onerror = function () { reject(rq.error); };
+        });
+      });
+    },
+    put: function (rec) { return openDB().then(function (db) { return new Promise(function (res, rej) { var t = db.transaction(STORE_V, "readwrite"); t.objectStore(STORE_V).put(rec); t.oncomplete = function () { res(); }; t.onerror = function () { rej(t.error); }; }); }); },
+    del: function (vid) { return openDB().then(function (db) { return new Promise(function (res, rej) { var t = db.transaction(STORE_V, "readwrite"); t.objectStore(STORE_V).delete(vid); t.oncomplete = function () { res(); }; t.onerror = function () { rej(t.error); }; }); }); },
+    clear: function () { return openDB().then(function (db) { return new Promise(function (res, rej) { var t = db.transaction(STORE_V, "readwrite"); t.objectStore(STORE_V).clear(); t.oncomplete = function () { res(); }; t.onerror = function () { rej(t.error); }; }); }); }
+  };
+  global.MOTVectorStore = VEC;
 })(window);

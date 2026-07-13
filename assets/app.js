@@ -63,6 +63,14 @@
       "ref.1": "Cybersecurity Operations Framework", "ref.2": "Managed Services SLA Standards",
       "ref.3": "Cloud Infrastructure Baseline", "ref.4": "Digital Governance Guide",
       "ref.5": "KPI & Acceptance Criteria Library",
+      "rag.used": "Used reference books", "rag.missing": "Missing requirements found", "rag.suggest": "Suggested improvements",
+      "rag.none": "No strong reference matches were found.", "rag.nosect": "General relevance",
+      "rag.nomiss": "No missing required sections detected — the document covers the essentials.", "rag.nosug": "No additional suggestions.",
+      "rag.reasonPre": "Selected for strong coverage of:", "rag.reasonGeneral": "general relevance", "rag.terms": "shared terms",
+      "rag.addstr": "Add or strengthen", "rag.guided": "guided by",
+      "sect.scope": "Scope", "sect.objectives": "Objectives", "sect.deliverables": "Deliverables", "sect.kpis": "KPIs",
+      "sect.acceptance": "Acceptance Criteria", "sect.governance": "Governance", "sect.cyber": "Cybersecurity", "sect.sla": "SLA",
+      "sect.risks": "Risks", "sect.dependencies": "Dependencies", "sect.pricing": "Pricing", "sect.technical": "Technical Requirements",
       "step.upload": "Upload", "step.analysis": "Analysis", "step.findings": "Recommendations",
       "step.improve": "Improved Document", "step.report": "Executive Report",
       "step.upload.d": "Add your document", "step.analysis.d": "AI reviews quality & gaps",
@@ -220,6 +228,14 @@
       "ref.1": "إطار عمليات الأمن السيبراني", "ref.2": "معايير اتفاقيات مستوى الخدمة المُدارة",
       "ref.3": "الخط الأساس للبنية التحتية السحابية", "ref.4": "دليل الحوكمة الرقمية",
       "ref.5": "مكتبة مؤشرات الأداء ومعايير القبول",
+      "rag.used": "الكراسات المرجعية المستخدمة", "rag.missing": "المتطلبات المفقودة المكتشفة", "rag.suggest": "التحسينات المقترحة",
+      "rag.none": "لم يتم العثور على مطابقات مرجعية قوية.", "rag.nosect": "صلة عامة",
+      "rag.nomiss": "لا توجد أقسام مطلوبة مفقودة — المستند يغطي الأساسيات.", "rag.nosug": "لا توجد اقتراحات إضافية.",
+      "rag.reasonPre": "اختير لتغطيته القوية لـ:", "rag.reasonGeneral": "صلة عامة", "rag.terms": "مصطلحات مشتركة",
+      "rag.addstr": "أضف أو عزّز", "rag.guided": "بالاسترشاد بـ",
+      "sect.scope": "نطاق العمل", "sect.objectives": "الأهداف", "sect.deliverables": "المخرجات", "sect.kpis": "مؤشرات الأداء",
+      "sect.acceptance": "معايير القبول", "sect.governance": "الحوكمة", "sect.cyber": "الأمن السيبراني", "sect.sla": "اتفاقية مستوى الخدمة",
+      "sect.risks": "المخاطر", "sect.dependencies": "الاعتماديات", "sect.pricing": "التسعير", "sect.technical": "المتطلبات الفنية",
       "step.upload": "رفع المستند", "step.analysis": "التحليل", "step.findings": "التوصيات",
       "step.improve": "المستند المُحسّن", "step.report": "التقرير التنفيذي",
       "step.upload.d": "أضف مستندك", "step.analysis.d": "فحص الجودة والفجوات",
@@ -442,6 +458,7 @@
   /* ---------------- helpers ---------------- */
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   let lang = localStorage.getItem("mot_lang") || "ar";
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
@@ -483,7 +500,7 @@
     updateScoreTag(currentScore);
 
     buildCategories();
-    if (analysed) { buildFindings(currentFilter); buildDiff(); buildRefs(); }
+    if (analysed) { buildFindings(currentFilter); buildDiff(); if (lastRag) renderRag(lastRag); }
     updateFilterCounts();
     if (dashReady) updateDashboard();
     try { document.dispatchEvent(new CustomEvent("mot:langchange", { detail: { lang: lang } })); } catch (e) {}
@@ -607,7 +624,7 @@
     buildCategories();
     buildFindings("all");
     buildDiff();
-    buildRefs();
+    runRag();
     showResults("overview");
   }
 
@@ -619,22 +636,56 @@
   }
   function showResults(tab) { showView("results"); activateTab(tab || "overview"); }
 
-  const REFS = [
-    { key: "ref.1", cat: "rcat.cyber", rel: 92 },
-    { key: "ref.2", cat: "rcat.managed", rel: 88 },
-    { key: "ref.3", cat: "rcat.infra", rel: 84 },
-    { key: "ref.4", cat: "rcat.digital", rel: 79 },
-    { key: "ref.5", cat: "rcat.ai", rel: 74 }
-  ];
-  function buildRefs() {
+  /* ---------- AI Knowledge Engine (RAG) retrieval into the results ---------- */
+  var lastRag = null;
+  function sectLabel(code) { return t("sect." + code); }
+  function buildRagQuery() {
+    var s = activeSample || SAMPLES.it;
+    var name = (s.name && (s.name.ar || s.name.en)) || "";
+    var catAr = s.catKey ? (I18N.ar[s.catKey] || "") : "";
+    // The analysed document covers scope/objectives/deliverables/support/pricing and is
+    // weak on KPIs/SLAs/acceptance/governance/cybersecurity (consistent with the findings).
+    var covered = "نطاق العمل والأهداف والمخرجات والتسليمات ونموذج الدعم والتشغيل والتسعير والتكلفة";
+    return name + " " + catAr + " " + covered;
+  }
+  function runRag() {
+    if (!window.MOTRag) return;
+    window.MOTRag.analyze(buildRagQuery(), { topK: 4 }).then(function (res) {
+      lastRag = res; renderRag(res);
+      var dr = document.getElementById("dashRefs"); if (dr) dr.textContent = String(res.references.length);
+    }).catch(function (e) { if (window.console) console.warn("RAG error", e); });
+  }
+  function renderRag(res) {
+    if (!res) return;
     var wrap = document.getElementById("refList");
-    if (!wrap) return;
-    wrap.innerHTML = REFS.map(function (r) {
-      return '<div class="ref-item"><div class="ref-top"><span class="ref-ico">▤</span>'
-        + '<span class="ref-name">' + t(r.key) + '</span><span class="ref-cat">' + t(r.cat) + '</span></div>'
-        + '<div class="ref-rel"><span class="ref-bar"><span style="width:' + r.rel + '%"></span></span>'
-        + '<span class="ref-pct">' + r.rel + '%</span></div></div>';
-    }).join("");
+    if (wrap) {
+      wrap.innerHTML = res.references.map(function (r) {
+        var pct = Math.max(1, Math.round(r.score * 100));
+        var matched = (r.matchedSections || []).slice(0, 4).map(function (c) { return '<span class="chip">' + esc(sectLabel(c)) + "</span>"; }).join("");
+        var overlap = (r.overlap || []).slice(0, 5).join("، ");
+        var secs = (r.matchedSections || []).slice(0, 3).map(sectLabel).join("، ");
+        var reason = t("rag.reasonPre") + " " + (secs || t("rag.reasonGeneral")) + (overlap ? (" · " + t("rag.terms") + ": " + overlap) : "");
+        return '<div class="ref-item"><div class="ref-top"><span class="ref-ico">▤</span>' +
+          '<span class="ref-name">' + esc(r.name) + '</span><span class="ref-cat">' + esc(t("rcat." + r.category)) + "</span></div>" +
+          '<div class="ref-rel"><span class="ref-bar"><span style="width:' + pct + '%"></span></span><span class="ref-pct">' + pct + "%</span></div>" +
+          '<div class="rag-matched">' + (matched || '<span class="muted">' + esc(t("rag.nosect")) + "</span>") + "</div>" +
+          '<div class="rag-reason">' + esc(reason) + "</div></div>";
+      }).join("") || '<p class="muted">' + esc(t("rag.none")) + "</p>";
+    }
+    var mwrap = document.getElementById("ragMissing");
+    if (mwrap) {
+      mwrap.innerHTML = (res.missing && res.missing.length)
+        ? '<div class="chips">' + res.missing.map(function (c) { return '<span class="rag-miss">' + esc(sectLabel(c)) + "</span>"; }).join("") + "</div>"
+        : '<p class="muted">' + esc(t("rag.nomiss")) + "</p>";
+    }
+    var swrap = document.getElementById("ragSuggest");
+    if (swrap) {
+      swrap.innerHTML = (res.suggestions && res.suggestions.length)
+        ? '<ul class="rag-suglist">' + res.suggestions.map(function (sug) {
+            return "<li><b>" + esc(t("rag.addstr") + " " + sectLabel(sug.section)) + "</b>" + (sug.refName ? ' — <span class="muted">' + esc(t("rag.guided") + " " + sug.refName) + "</span>" : "") + "</li>";
+          }).join("") + "</ul>"
+        : '<p class="muted">' + esc(t("rag.nosug")) + "</p>";
+    }
   }
 
   function updateScoreTag(score) {

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="template-manager-v11" />
+<meta name="x-build" content="rag-engine-v12" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -460,8 +460,13 @@
       </div><!-- /tab-differences -->
 
       <div class="tabpanel" id="tab-references" role="tabpanel">
-      <p class="muted panel-lead" data-i18n="ref.sub">Reference books matched from the Ministry knowledge library.</p>
+      <p class="muted panel-lead" data-i18n="ref.sub">Semantically retrieved from the Reference Knowledge Center — only the most relevant Ministry-approved references are used as guidance (not copied).</p>
+      <h3 class="section-title" data-i18n="rag.used">Used reference books</h3>
       <div class="ref-list" id="refList"><!-- injected --></div>
+      <h3 class="section-title" data-i18n="rag.missing">Missing requirements found</h3>
+      <div class="rag-block" id="ragMissing"><!-- injected --></div>
+      <h3 class="section-title" data-i18n="rag.suggest">Suggested improvements</h3>
+      <div class="rag-block" id="ragSuggest"><!-- injected --></div>
       </div><!-- /tab-references -->
 
       <div class="tabpanel" id="tab-report" role="tabpanel">
@@ -545,6 +550,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="assets/template-engine.js"></script>
   <script src="assets/knowledge-center.js"></script>
+  <script src="assets/rag-engine.js"></script>
   <script src="assets/knowledge-ui.js"></script>
   <script src="assets/templates-ui.js"></script>
   <script src="assets/app.js"></script>

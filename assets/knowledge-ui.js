@@ -529,7 +529,7 @@
         case "preview": doPreview(b); break;
         case "edit": state.sub = "upload"; renderShell(); renderUpload(document.getElementById("kc-body"), b); markNav("upload"); break;
         case "download": doDownload(b); break;
-        case "reindex": MOTKnowledge.reindex(idv).then(function () { toast(t("reindexed")); renderBody(); }); break;
+        case "reindex": MOTKnowledge.reindex(idv).then(function () { if (global.MOTRag) global.MOTRag.indexBook(b); toast(t("reindexed")); renderBody(); }); break;
         case "archive": MOTKnowledge.setStatus(idv, "archived").then(function () { toast(t("archived_ok")); renderBody(); }); break;
         case "unarchive": MOTKnowledge.setStatus(idv, "active").then(function () { toast(t("restored_ok")); renderBody(); }); break;
         case "replace": state.replaceId = idv; document.getElementById("kcReplaceInput").click(); break;
@@ -573,7 +573,7 @@
     if (e.target.id === "kcReplaceInput" && e.target.files && e.target.files[0] && state.replaceId) {
       var f = e.target.files[0]; e.target.value = "";
       MOTKnowledge.update(state.replaceId, { fileBlob: f, fileName: f.name, fileType: f.type, hasFile: true, lastIndexed: new Date().toISOString() })
-        .then(function () { toast(t("updated_ok")); renderBody(); });
+        .then(function (rec) { if (global.MOTRag && rec) global.MOTRag.indexBook(rec); toast(t("updated_ok")); renderBody(); });
       state.replaceId = null;
     }
   });
@@ -605,7 +605,7 @@
     };
     if (file) { data.fileBlob = file; data.fileName = file.name; data.fileType = file.type; data.hasFile = true; }
     var p = state.editId ? MOTKnowledge.update(state.editId, data) : MOTKnowledge.add(data);
-    p.then(function () { toast(state.editId ? t("updated_ok") : t("uploaded_ok")); state.editId = null; setSub("books"); });
+    p.then(function (rec) { if (global.MOTRag && rec) global.MOTRag.indexBook(rec); toast(state.editId ? t("updated_ok") : t("uploaded_ok")); state.editId = null; setSub("books"); });
   });
 
   document.addEventListener("mot:langchange", function () {
