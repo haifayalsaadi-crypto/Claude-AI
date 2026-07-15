@@ -639,3 +639,24 @@ body.in-templates .stepper-wrap{display:none}
 .create-form .cf-wide{grid-column:1 / -1}
 .create-form textarea{resize:vertical;min-height:46px}
 @media(max-width:640px){ .create-form{grid-template-columns:1fr} }
+
+/* ================= RBAC — permissions, role menu, users ================= */
+.perm-hidden{display:none !important}
+body.in-users .stepper-wrap{display:none}
+.role-menu{position:fixed;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);min-width:230px;z-index:120;padding:6px;animation:fade .15s ease}
+.role-menu-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--grey);padding:8px 10px}
+[dir="rtl"] .role-menu-h{letter-spacing:0}
+.role-menu-i{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none;border:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--dark-green);padding:9px 10px;border-radius:8px;cursor:pointer;text-align:start}
+.role-menu-i:hover{background:var(--soft-aqua)}
+.role-menu-i.is-active{color:var(--aqua)}
+.role-tick{color:var(--aqua)}
+.role-menu-sep{height:1px;background:var(--line);margin:6px 4px}
+.ucards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.ucard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow-sm)}
+.ucard.is-current{border-color:var(--aqua);box-shadow:0 0 0 3px var(--soft-aqua),var(--shadow-sm)}
+.ucard-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.ucard-h h3{font-size:16px}
+.ucard-d{font-size:13px;margin-bottom:12px;line-height:1.55}
+.uperm-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.uperm{font-family:"Consolas","Courier New",monospace;font-size:11px;color:var(--grey);background:var(--soft);border:1px solid var(--line);padding:3px 8px;border-radius:6px;direction:ltr;unicode-bidi:isolate;opacity:.45}
+.uperm.on{color:var(--mid-green);background:#e9f6ee;border-color:#cdeede;opacity:1}

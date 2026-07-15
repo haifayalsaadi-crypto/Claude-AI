@@ -36,7 +36,7 @@
       rolled: "Rolled back to the previous version.", replaced: "Template file replaced.",
       archived_ok: "Template archived.", deleted_ok: "Template version deleted.",
       del_confirm: "Delete this template version permanently?", nofile: "No file attached to this version.",
-      none: "—", uploaded_lbl: "Upload date", notes_lbl: "Notes",
+      none: "—", uploaded_lbl: "Upload date", notes_lbl: "Notes", denied: "You don't have permission for this action.",
       doctype: { sow: "Statement of Work", spec: "Technical Specification", framework: "Framework Agreement", rfp: "RFP" },
       dept: { procurement: "Procurement", it: "Information Technology", tech: "Technology", planning: "Strategy & Planning", cyber: "Cybersecurity" },
       langv: { ar: "Arabic", en: "English", bi: "Bilingual" },
@@ -65,7 +65,7 @@
       rolled: "تمت العودة إلى الإصدار السابق.", replaced: "تم استبدال ملف القالب.",
       archived_ok: "تمت أرشفة القالب.", deleted_ok: "تم حذف إصدار القالب.",
       del_confirm: "حذف إصدار القالب هذا نهائيًا؟", nofile: "لا يوجد ملف مرفق بهذا الإصدار.",
-      none: "—", uploaded_lbl: "تاريخ الرفع", notes_lbl: "ملاحظات",
+      none: "—", uploaded_lbl: "تاريخ الرفع", notes_lbl: "ملاحظات", denied: "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
       doctype: { sow: "نطاق عمل", spec: "مواصفات فنية", framework: "اتفاقية إطارية", rfp: "كراسة شروط" },
       dept: { procurement: "المشتريات", it: "تقنية المعلومات", tech: "التقنية", planning: "الاستراتيجية والتخطيط", cyber: "الأمن السيبراني" },
       langv: { ar: "العربية", en: "الإنجليزية", bi: "ثنائية اللغة" },
@@ -74,6 +74,7 @@
   };
 
   function lang() { return document.documentElement.lang === "ar" ? "ar" : "en"; }
+  function can(p) { return global.MOTAuth ? global.MOTAuth.can(p) : true; }
   function t(k) { var d = T[lang()]; return d[k] != null ? d[k] : (T.en[k] || k); }
   function L(kind, code) { var d = T[lang()][kind] || {}; return d[code] || code; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
@@ -96,6 +97,8 @@
     if (!isCurrent) acts.push(["setcurrent", "a_setcurrent", "★"]);
     acts.push(["preview", "a_preview", "⌕"], ["download", "a_download", "⬇"], ["replace", "a_replace", "⇄"]);
     if (!isCurrent) acts.push(["archive", "a_archive", "▢"], ["delete", "a_delete", "✕"]);
+    var permOf = { setcurrent: "tpl.replace", preview: "template", download: "download", replace: "tpl.replace", archive: "tpl.replace", delete: "tpl.replace" };
+    acts = acts.filter(function (a) { return can(permOf[a[0]]); });
     return '<div class="kc-actions">' + acts.map(function (a) {
       return '<button class="kc-actbtn' + (a[0] === "delete" ? " danger" : "") + '" data-tm-act="' + a[0] + '" data-id="' + r.id + '" title="' + esc(t(a[1])) + '" aria-label="' + esc(t(a[1])) + '">' + a[2] + "</button>";
     }).join("") + "</div>";
@@ -110,7 +113,7 @@
       var body =
         '<div class="kc">' +
           '<div class="kc-head"><div><h1>' + esc(t("title")) + '</h1><p class="muted">' + esc(t("subtitle")) + "</p></div>" +
-            '<div class="kc-head-actions"><button class="btn btn-primary" data-tm-upload>＋ ' + esc(t("upload_new")) + '</button><button class="btn btn-ghost" data-tm-back>' + esc(t("back")) + "</button></div></div>" +
+            '<div class="kc-head-actions">' + (can("tpl.upload") ? '<button class="btn btn-primary" data-tm-upload>＋ ' + esc(t("upload_new")) + "</button>" : "") + '<button class="btn btn-ghost" data-tm-back>' + esc(t("back")) + "</button></div></div>" +
           '<div class="tm-note"><span class="tm-note-ico">⚠</span><span>' + esc(t("note")) + "</span></div>" +
           currentCard(cur, rollbackTarget) +
           '<h3 class="section-title">' + esc(t("history")) + "</h3>" +
@@ -136,7 +139,7 @@
 
   function currentCard(c, rollbackTarget) {
     if (!c) return "";
-    var rb = rollbackTarget ? '<button class="btn btn-ghost btn-sm" data-tm-act="rollback" data-id="' + rollbackTarget.id + '">' + esc(t("a_rollback")) + "</button>" : "";
+    var rb = (rollbackTarget && can("tpl.replace")) ? '<button class="btn btn-ghost btn-sm" data-tm-act="rollback" data-id="' + rollbackTarget.id + '">' + esc(t("a_rollback")) + "</button>" : "";
     return '<div class="panel tm-current">' +
       '<div class="tm-current-head"><span class="tm-current-ico">DOCX</span>' +
         '<div class="tm-current-m"><span class="tm-current-lbl">' + esc(t("current")) + '</span>' +
@@ -146,8 +149,8 @@
       (c.notes ? '<p class="muted tm-current-notes">' + esc(t("notes_lbl")) + ": " + esc(c.notes) + "</p>" : "") +
       '<span class="lib-sub">' + esc(t("detected")) + "</span>" + phChips(c.placeholders) +
       '<div class="tm-current-actions"><button class="btn btn-ghost btn-sm" data-tm-act="preview" data-id="' + c.id + '">' + esc(t("a_preview")) + '</button>' +
-        '<button class="btn btn-ghost btn-sm" data-tm-act="download" data-id="' + c.id + '">' + esc(t("a_download")) + '</button>' +
-        '<button class="btn btn-ghost btn-sm" data-tm-act="replace" data-id="' + c.id + '">' + esc(t("a_replace")) + "</button>" + rb + "</div></div>";
+        (can("download") ? '<button class="btn btn-ghost btn-sm" data-tm-act="download" data-id="' + c.id + '">' + esc(t("a_download")) + '</button>' : "") +
+        (can("tpl.replace") ? '<button class="btn btn-ghost btn-sm" data-tm-act="replace" data-id="' + c.id + '">' + esc(t("a_replace")) + "</button>" : "") + rb + "</div></div>";
   }
 
   function formModal(rec) {
@@ -186,6 +189,8 @@
   function saveBlob(blob, filename) { var url = URL.createObjectURL(blob); var a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500); }
 
   function handleAct(act, id) {
+    var permOf = { preview: "template", download: "download", replace: "tpl.replace", setcurrent: "tpl.replace", rollback: "tpl.replace", archive: "tpl.replace", delete: "tpl.replace" };
+    if (permOf[act] && !can(permOf[act])) { toast(t("denied")); return; }
     MOTTemplates.get(id).then(function (r) {
       if (!r) return;
       switch (act) {
@@ -203,7 +208,7 @@
   document.addEventListener("click", function (e) {
     if (!document.getElementById("view-templates")) return;
     if (e.target.closest("[data-tm-back]")) { if (global.MOTApp) global.MOTApp.showView("upload"); return; }
-    if (e.target.closest("[data-tm-upload]")) { state.editId = null; formModal(null); return; }
+    if (e.target.closest("[data-tm-upload]")) { if (!can("tpl.upload")) { toast(t("denied")); return; } state.editId = null; formModal(null); return; }
     if (e.target.closest("[data-tm-close]")) { closeModal(); return; }
     if (e.target.id === "tmModal") { closeModal(); return; }
     var a = e.target.closest("[data-tm-act]");
@@ -213,6 +218,7 @@
   document.addEventListener("change", function (e) {
     if (e.target.id === "tmReplaceInput" && e.target.files && e.target.files[0] && state.replaceId) {
       var f = e.target.files[0]; e.target.value = "";
+      if (!can("tpl.replace")) { toast(t("denied")); return; }
       MOTTemplates.replaceFile(state.replaceId, f, f.name).then(function () { toast(t("replaced")); state.replaceId = null; closeModal(); render(); });
     }
   });
@@ -220,6 +226,7 @@
   document.addEventListener("submit", function (e) {
     if (e.target.id !== "tmForm") return;
     e.preventDefault();
+    if (!can("tpl.upload")) { toast(t("denied")); return; }
     var g = function (id) { var el = document.getElementById(id); return el ? el.value : ""; };
     var name = g("tmf-name").trim();
     var fileEl = document.getElementById("tmf-file");

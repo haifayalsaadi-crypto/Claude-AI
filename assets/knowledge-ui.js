@@ -64,6 +64,7 @@
       cl_add_title: "Add clause", cl_edit_title: "Edit clause", cl_preview_title: "Clause preview",
       cl_hist_title: "Usage history", cl_hist_empty: "No usage recorded yet.",
       cl_en_none: "No English text provided.", cl_used: "Used", cl_times: "times",
+      denied: "You don't have permission for this action.",
       ctype: { mandatory: "Mandatory", recommended: "Recommended", optional: "Optional", standard: "Standard" },
       ccat: { kpi: "KPIs", sla: "SLA", governance: "Governance", cyber: "Cybersecurity", deliverables: "Deliverables", acceptance: "Acceptance Criteria", risks: "Risks", dependencies: "Dependencies", support: "Support Requirements", cloud: "Cloud Requirements", hosting: "Hosting Requirements", reporting: "Reporting Requirements", payment: "Payment Terms", evaluation: "Evaluation Criteria" }
     },
@@ -116,12 +117,14 @@
       cl_add_title: "إضافة بند", cl_edit_title: "تعديل بند", cl_preview_title: "معاينة البند",
       cl_hist_title: "سجل الاستخدام", cl_hist_empty: "لا يوجد استخدام مُسجّل بعد.",
       cl_en_none: "لا يوجد نص إنجليزي.", cl_used: "استُخدم", cl_times: "مرة",
+      denied: "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
       ctype: { mandatory: "إلزامي", recommended: "موصى به", optional: "اختياري", standard: "قياسي" },
       ccat: { kpi: "مؤشرات الأداء", sla: "اتفاقيات مستوى الخدمة", governance: "الحوكمة", cyber: "الأمن السيبراني", deliverables: "المخرجات", acceptance: "معايير القبول", risks: "المخاطر", dependencies: "الاعتماديات", support: "متطلبات الدعم", cloud: "المتطلبات السحابية", hosting: "متطلبات الاستضافة", reporting: "متطلبات التقارير", payment: "شروط الدفع", evaluation: "معايير التقييم" }
     }
   };
 
   function lang() { return document.documentElement.lang === "ar" ? "ar" : "en"; }
+  function can(p) { return global.MOTAuth ? global.MOTAuth.can(p) : true; }
   function t(k) { var d = K[lang()]; return d[k] != null ? d[k] : (K.en[k] || k); }
   function L(kind, code) { var d = K[lang()][kind] || {}; return d[code] || code; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
@@ -148,12 +151,13 @@
     var root = document.getElementById("view-knowledge");
     if (!root) return;
     var navItems = [["overview", "nav_overview"], ["books", "nav_books"], ["clauses", "nav_clauses"], ["categories", "nav_categories"], ["upload", "nav_upload"], ["analytics", "nav_analytics"]];
+    if (!can("book.add")) navItems = navItems.filter(function (n) { return n[0] !== "upload"; });
     root.innerHTML =
       '<div class="kc">' +
         '<div class="kc-head">' +
           '<div><h1>' + esc(t("title")) + '</h1><p class="muted">' + esc(t("subtitle")) + "</p></div>" +
           '<div class="kc-head-actions">' +
-            '<button class="btn btn-primary" data-kc-nav="upload">＋ ' + esc(t("nav_upload")) + "</button>" +
+            (can("book.add") ? '<button class="btn btn-primary" data-kc-nav="upload">＋ ' + esc(t("nav_upload")) + "</button>" : "") +
             '<button class="btn btn-ghost" data-kc-back>' + esc(t("back")) + "</button>" +
           "</div>" +
         "</div>" +
@@ -210,6 +214,8 @@
         }
         return true;
       });
+      var dept = (global.MOTAuth && global.MOTAuth.department) ? global.MOTAuth.department() : null;
+      if (dept) filtered = filtered.filter(function (b) { return b.department === dept; });
       var cols = ["col_name", "col_cat", "col_dept", "col_ptype", "col_year", "col_ver", "col_uploaded", "col_indexed", "col_status", "col_used", "col_actions"];
       var rowsHtml = filtered.map(function (b) {
         return '<tr>' +
@@ -249,6 +255,8 @@
       [archived ? "unarchive" : "archive", archived ? "a_unarchive" : "a_archive", archived ? "▲" : "▢"],
       ["delete", "a_delete", "✕"]
     ];
+    var permOf = { preview: "kc", edit: "book.edit", replace: "book.edit", reindex: "reindex", download: "download", archive: "book.edit", unarchive: "book.edit", delete: "book.delete" };
+    items = items.filter(function (it) { return can(permOf[it[0]]); });
     return '<div class="kc-actions">' + items.map(function (it) {
       return '<button class="kc-actbtn' + (it[0] === "delete" ? " danger" : "") + '" data-kc-act="' + it[0] + '" data-id="' + b.id + '" title="' + esc(t(it[1])) + '" aria-label="' + esc(t(it[1])) + '">' + it[2] + "</button>";
     }).join("") + "</div>";
@@ -380,6 +388,8 @@
     var archived = c.status === "archived";
     var items = [["preview", "cl_preview", "⌕"], ["copy", "cl_copy", "⧉"], ["edit", "cl_edit", "✎"],
       [archived ? "restore" : "archive", archived ? "cl_restore" : "cl_archive", archived ? "▲" : "▢"], ["history", "cl_history", "≡"]];
+    var permOf = { preview: "clause", copy: "clause", history: "clause", edit: "clause.manage", archive: "clause.manage", restore: "clause.manage" };
+    items = items.filter(function (it) { return can(permOf[it[0]]); });
     return '<div class="kc-actions">' + items.map(function (it) {
       return '<button class="kc-actbtn" data-cl-act="' + it[0] + '" data-id="' + c.id + '" title="' + esc(t(it[1])) + '" aria-label="' + esc(t(it[1])) + '">' + it[2] + "</button>";
     }).join("") + "</div>";
@@ -416,7 +426,7 @@
             '<input type="search" id="clSearch" placeholder="' + esc(t("cl_search")) + '" value="' + esc(state.clQ) + '" /></div>' +
           '<select id="clFilterCat" class="kc-select"><option value="all">' + esc(t("all_cats")) + "</option>" + optionList(CCATS, "ccat", state.clCat === "all" ? "" : state.clCat) + "</select>" +
           '<select id="clFilterStatus" class="kc-select"><option value="all">' + esc(t("all_status")) + "</option>" + optionList(STATUS, "status", state.clStatus === "all" ? "" : state.clStatus) + "</select>" +
-          '<button class="btn btn-primary btn-sm" data-cl-add>＋ ' + esc(t("cl_add")) + "</button>" +
+          (can("clause.manage") ? '<button class="btn btn-primary btn-sm" data-cl-add>＋ ' + esc(t("cl_add")) + "</button>" : "") +
         "</div>" +
         '<div class="kc-tablewrap"><table class="kc-table"><thead><tr>' +
           cols.map(function (c) { return "<th>" + esc(t(c)) + "</th>"; }).join("") +
@@ -490,6 +500,8 @@
   }
 
   function handleClause(act, cid) {
+    var permOf = { edit: "clause.manage", archive: "clause.manage", restore: "clause.manage", preview: "clause", copy: "clause", history: "clause" };
+    if (permOf[act] && !can(permOf[act])) { toast(t("denied")); return; }
     MOTClauses.get(cid).then(function (c) {
       if (!c) return;
       switch (act) {
@@ -523,6 +535,8 @@
 
   /* ---------------- actions ---------------- */
   function handleAct(act, idv) {
+    var permOf = { edit: "book.edit", replace: "book.edit", reindex: "reindex", archive: "book.edit", unarchive: "book.edit", delete: "book.delete", download: "download", preview: "kc" };
+    if (permOf[act] && !can(permOf[act])) { toast(t("denied")); return; }
     MOTKnowledge.get(idv).then(function (b) {
       if (!b) return;
       switch (act) {
@@ -548,7 +562,7 @@
     if (open) { state.editId = open.getAttribute("data-kc-open"); setSub("details"); return; }
     var catc = e.target.closest("[data-kc-cat]");
     if (catc) { state.filterCat = catc.getAttribute("data-kc-cat"); setSub("books"); return; }
-    if (e.target.closest("[data-cl-add]")) { clauseForm(null); return; }
+    if (e.target.closest("[data-cl-add]")) { if (!can("clause.manage")) { toast(t("denied")); return; } clauseForm(null); return; }
     if (e.target.closest("[data-kc-modal-close]")) { closeModal(); return; }
     if (e.target.id === "kcModal") { closeModal(); return; }
     var clAct = e.target.closest("[data-cl-act]");
@@ -572,6 +586,7 @@
     if (e.target.id === "clFilterStatus") { state.clStatus = e.target.value; renderClauses(document.getElementById("kc-body")); }
     if (e.target.id === "kcReplaceInput" && e.target.files && e.target.files[0] && state.replaceId) {
       var f = e.target.files[0]; e.target.value = "";
+      if (!can("book.edit")) { toast(t("denied")); return; }
       MOTKnowledge.update(state.replaceId, { fileBlob: f, fileName: f.name, fileType: f.type, hasFile: true, lastIndexed: new Date().toISOString() })
         .then(function (rec) { if (global.MOTRag && rec) global.MOTRag.indexBook(rec); toast(t("updated_ok")); renderBody(); });
       state.replaceId = null;
@@ -582,6 +597,7 @@
   document.addEventListener("submit", function (e) {
     if (e.target.id === "clForm") {
       e.preventDefault();
+      if (!can("clause.manage")) { toast(t("denied")); return; }
       var gc = function (id) { var el = document.getElementById(id); return el ? el.value : ""; };
       var ctitle = gc("clf-title").trim(); if (!ctitle) { toast(t("f_req")); return; }
       var ctags = gc("clf-tags").split(/[،,]/).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -592,6 +608,7 @@
     }
     if (e.target.id !== "kcForm") return;
     e.preventDefault();
+    if (!can(state.editId ? "book.edit" : "book.add")) { toast(t("denied")); return; }
     var g = function (id) { var el = document.getElementById(id); return el ? el.value : ""; };
     var name = g("kcf-name").trim();
     if (!name) { toast(t("f_req")); return; }

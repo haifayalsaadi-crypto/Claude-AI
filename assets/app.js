@@ -17,6 +17,18 @@
       "cmd.new": "New Specification", "cmd.library": "Reference Library",
       "cmd.template": "Template Manager", "cmd.addbook": "Add Reference Book",
       "cmd.reindex": "Reindex Library", "cmd.reports": "Reports", "cmd.settings": "Settings",
+      "cmd.users": "User Management",
+      "perm.denied": "You don't have permission for this action.",
+      "hdr.role": "Role", "hdr.switchRole": "Switch role (demo)", "hdr.usermgmt": "User Management",
+      "role.admin": "System Administrator", "role.manager": "Department Manager",
+      "role.reviewer": "Reviewer", "role.editor": "Editor", "role.viewer": "Viewer",
+      "role.admin.d": "Full access to all pages, actions and settings.",
+      "role.manager.d": "Operational management; department-scoped items; no user management.",
+      "role.reviewer.d": "Review & comment only — read-only with report access.",
+      "role.editor.d": "Create and edit content; no system settings or user management.",
+      "role.viewer.d": "Read-only access.",
+      "users.title": "User Management", "users.sub": "Roles and permissions. Select an active role (demo login — production roles come from SSO).",
+      "users.setactive": "Set as active", "users.perms": "Permissions", "users.current": "Current active role",
       "lib.title": "Smart Reference Library", "lib.search": "Search the library",
       "lib.categories": "Categories", "lib.recent": "Recently added",
       "lib.totalBooks": "Total books", "lib.cats": "Categories",
@@ -188,6 +200,18 @@
       "cmd.new": "كراسة جديدة", "cmd.library": "المكتبة المرجعية",
       "cmd.template": "إدارة القوالب", "cmd.addbook": "إضافة كراسة مرجعية",
       "cmd.reindex": "إعادة فهرسة المكتبة", "cmd.reports": "التقارير", "cmd.settings": "الإعدادات",
+      "cmd.users": "إدارة المستخدمين",
+      "perm.denied": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
+      "hdr.role": "الدور", "hdr.switchRole": "تبديل الدور (تجريبي)", "hdr.usermgmt": "إدارة المستخدمين",
+      "role.admin": "مدير النظام", "role.manager": "مدير الإدارة",
+      "role.reviewer": "مراجع", "role.editor": "محرّر", "role.viewer": "مطّلع",
+      "role.admin.d": "صلاحية كاملة لجميع الصفحات والإجراءات والإعدادات.",
+      "role.manager.d": "إدارة تشغيلية؛ عناصر مقيّدة بالإدارة؛ دون إدارة المستخدمين.",
+      "role.reviewer.d": "المراجعة والتعليق فقط — قراءة مع إمكانية عرض التقارير.",
+      "role.editor.d": "إنشاء وتحرير المحتوى؛ دون إعدادات النظام أو إدارة المستخدمين.",
+      "role.viewer.d": "صلاحية قراءة فقط.",
+      "users.title": "إدارة المستخدمين", "users.sub": "الأدوار والصلاحيات. اختر الدور الفعّال (دخول تجريبي — تأتي الأدوار في الإنتاج من تسجيل الدخول الموحّد).",
+      "users.setactive": "تعيين كفعّال", "users.perms": "الصلاحيات", "users.current": "الدور الفعّال الحالي",
       "lib.title": "المكتبة المرجعية الذكية", "lib.search": "ابحث داخل المكتبة",
       "lib.categories": "التصنيفات", "lib.recent": "أحدث الكراسات المضافة",
       "lib.totalBooks": "إجمالي الكراسات", "lib.cats": "التصنيفات",
@@ -475,7 +499,7 @@
   const t = (k) => (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.en[k] || k);
 
   const steps = $$(".step");
-  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results", knowledge:"view-knowledge", templates:"view-templates" };
+  const views = { upload:"view-upload", analysing:"view-analysing", results:"view-results", knowledge:"view-knowledge", templates:"view-templates", users:"view-users" };
   const stepOrder = ["upload","analysing","results"];
   let analysed = false;
   let activeSample = SAMPLES.it;
@@ -516,6 +540,7 @@
     updateFilterCounts();
     if (dashReady) updateDashboard();
     updateDownloadLabel();
+    if (typeof applyPermissions === "function") applyPermissions();
     try { document.dispatchEvent(new CustomEvent("mot:langchange", { detail: { lang: lang } })); } catch (e) {}
   }
 
@@ -553,6 +578,7 @@
     if (el) el.classList.add("is-active");
     document.body.classList.toggle("in-knowledge", key === "knowledge");
     document.body.classList.toggle("in-templates", key === "templates");
+    document.body.classList.toggle("in-users", key === "users");
     const idx = stepOrder.indexOf(key);
     steps.forEach(s => {
       const si = stepOrder.indexOf(s.dataset.view);
@@ -582,6 +608,7 @@
   }
 
   function handleFile(file) {
+    if (!can("upload")) { denied(); return; }
     if (!validFile(file)) { setDzState("error"); announce(t("st.error")); return; }
     $("#upFileName").textContent = file.name;
     $("#okFileName").textContent = file.name;
@@ -809,6 +836,7 @@
     $$(".opcard").forEach(c => c.setAttribute("aria-pressed", "false"));
   }
   function selectMode(mode) {
+    if (!can(mode)) { denied(); return; }
     selectedMode = mode;
     var ws = document.querySelector(".workspace"); if (ws) ws.setAttribute("data-mode", mode);
     $$(".opcard").forEach(c => c.setAttribute("aria-pressed", c.dataset.mode === mode ? "true" : "false"));
@@ -819,6 +847,7 @@
   // Create New Specification — generate (reuses the AI pipeline)
   var cg = document.getElementById("createGenBtn");
   if (cg) cg.addEventListener("click", function () {
+    if (!can("create")) { denied(); return; }
     var nameEl = document.getElementById("createName");
     var catEl = document.getElementById("createCat");
     var gv = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; };
@@ -962,6 +991,7 @@
   }
   function downloadImprovedDocx() {
     var btn = $("#downloadBtn");
+    if (!can("download")) { denied(); return; }
     if (!window.MOTDoc || !window.PizZip) { toast(t("err.libs")); return; }
     var isCreate = !!(activeSample && activeSample.mode === "create");
     if (isCreate && !(window.docxtemplater || window.Docxtemplater)) { toast(t("err.libs")); return; }
@@ -1015,6 +1045,7 @@
 
   function exportReportPdf() {
     var btn = $("#exportReport");
+    if (!can("reports")) { denied(); return; }
     if (!window.html2canvas || !(window.jspdf && window.jspdf.jsPDF)) { toast(t("err.libs")); return; }
     var orig = btn.textContent; btn.disabled = true; btn.textContent = t("gen.pdf");
     var node = buildReportNode();
@@ -1090,6 +1121,8 @@
     if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   function cmdAction(cmd) {
+    var need = { "new": "create", addbook: "book.add", library: "kc", template: "template", reports: "reports", settings: "settings", users: "users" }[cmd];
+    if (need && !can(need)) { denied(); return; }
     switch (cmd) {
       case "new": analysed = false; if (typeof setDzState === "function") setDzState("idle"); resetDashboard(); resetMode(); showView("upload"); window.scrollTo({ top: 0, behavior: "smooth" }); break;
       case "template": openTemplates(); break;
@@ -1097,16 +1130,77 @@
       case "reports": if (analysed) showResults("report"); else toast(t("toast.first")); break;
       case "library": openKnowledge("overview"); break;
       case "addbook": openKnowledge("upload"); break;
+      case "users": openUsers(); break;
       default: phaseToast(); // reindex — later phases
     }
   }
   function openKnowledge(sub) {
+    if (!can("kc")) { denied(); return; }
+    if (sub === "upload" && !can("book.add")) { denied(); return; }
     if (window.MOTKnowledgeUI) window.MOTKnowledgeUI.open(sub || "overview");
     else { showView("upload"); toast(t("phase.soon")); }
   }
   function openTemplates() {
+    if (!can("template")) { denied(); return; }
     if (window.MOTTemplatesUI) window.MOTTemplatesUI.open();
     else openAdmin();
+  }
+
+  /* ---------- RBAC (roles & permissions) ---------- */
+  function can(p) { return window.MOTAuth ? window.MOTAuth.can(p) : true; }
+  function denied() { toast(t("perm.denied")); }
+  function roleLabel(r) { return t("role." + r); }
+  function applyPermissions() {
+    $$("[data-perm]").forEach(function (el) {
+      var need = el.getAttribute("data-perm");
+      var ok = need.split("|").some(function (p) { return can(p.trim()); });
+      el.classList.toggle("perm-hidden", !ok);
+    });
+    updateRoleChip();
+  }
+  function updateRoleChip() {
+    var r = window.MOTAuth ? window.MOTAuth.getRole() : "admin";
+    var rl = document.querySelector("#adminMenuBtn .user-role"); if (rl) rl.textContent = roleLabel(r);
+    var av = document.querySelector("#adminMenuBtn .avatar"); if (av) av.textContent = (r === "admin") ? "SA" : r.slice(0, 2).toUpperCase();
+  }
+  function toggleRoleMenu() {
+    var m = document.getElementById("roleMenu");
+    if (m) { m.remove(); return; }
+    var cur = window.MOTAuth ? window.MOTAuth.getRole() : "admin";
+    var roles = window.MOTAuth ? window.MOTAuth.ROLES : ["admin"];
+    var menu = document.createElement("div");
+    menu.id = "roleMenu"; menu.className = "role-menu";
+    menu.innerHTML = '<div class="role-menu-h">' + esc(t("hdr.switchRole")) + "</div>" +
+      roles.map(function (r) { return '<button class="role-menu-i' + (r === cur ? " is-active" : "") + '" data-role="' + r + '"><span>' + esc(roleLabel(r)) + "</span>" + (r === cur ? '<span class="role-tick">✓</span>' : "") + "</button>"; }).join("") +
+      (can("users") ? '<div class="role-menu-sep"></div><button class="role-menu-i" data-open="users">👤 ' + esc(t("hdr.usermgmt")) + "</button>" : "");
+    document.body.appendChild(menu);
+    var rect = document.getElementById("adminMenuBtn").getBoundingClientRect();
+    menu.style.top = (rect.bottom + 6) + "px";
+    if (document.documentElement.dir === "rtl") menu.style.left = rect.left + "px";
+    else menu.style.right = (window.innerWidth - rect.right) + "px";
+  }
+  function openUsers() {
+    if (!can("users")) { denied(); return; }
+    showView("users"); renderUsers();
+  }
+  var PERM_LIST = ["upload", "download", "improve", "create", "kc", "book.add", "book.edit", "book.delete", "reindex", "clause", "clause.manage", "template", "tpl.upload", "tpl.replace", "reports", "settings", "users"];
+  function renderUsers() {
+    var root = document.getElementById("view-users"); if (!root || !window.MOTAuth) return;
+    var cur = window.MOTAuth.getRole();
+    var cards = window.MOTAuth.ROLES.map(function (r) {
+      var set = window.MOTAuth.PERMS[r];
+      var chips = PERM_LIST.map(function (p) {
+        var has = (set === "ALL") || (set && set.indexOf(p) !== -1);
+        return '<span class="uperm' + (has ? " on" : "") + '">' + esc(p) + "</span>";
+      }).join("");
+      return '<div class="ucard' + (r === cur ? " is-current" : "") + '"><div class="ucard-h"><h3>' + esc(roleLabel(r)) + "</h3>" +
+        (r === cur ? '<span class="kc-badge st-active">' + esc(t("users.current")) + "</span>" : '<button class="btn btn-primary btn-sm" data-setrole="' + r + '">' + esc(t("users.setactive")) + "</button>") + "</div>" +
+        '<p class="muted ucard-d">' + esc(t("role." + r + ".d")) + "</p>" +
+        '<span class="lib-sub">' + esc(t("users.perms")) + '</span><div class="uperm-list">' + chips + "</div></div>";
+    }).join("");
+    root.innerHTML = '<div class="kc"><div class="kc-head"><div><h1>' + esc(t("users.title")) + '</h1><p class="muted">' + esc(t("users.sub")) + "</p></div>" +
+      '<div class="kc-head-actions"><button class="btn btn-ghost" data-uback>← ' + esc(t("step.setup")) + "</button></div></div>" +
+      '<div class="ucards">' + cards + "</div></div>";
   }
   document.addEventListener("click", function (e) {
     var c = e.target.closest("[data-cmd]");
@@ -1117,7 +1211,25 @@
   var nb = document.getElementById("notifBtn");
   if (nb) nb.addEventListener("click", phaseToast);
   var am = document.getElementById("adminMenuBtn");
-  if (am) am.addEventListener("click", phaseToast);
+  if (am) am.addEventListener("click", function (e) { e.stopPropagation(); toggleRoleMenu(); });
+  document.addEventListener("click", function (e) {
+    var rm = document.getElementById("roleMenu");
+    var r = e.target.closest("[data-role]");
+    if (r) { if (window.MOTAuth) window.MOTAuth.setRole(r.getAttribute("data-role")); if (rm) rm.remove(); return; }
+    if (e.target.closest("[data-open='users']")) { if (rm) rm.remove(); openUsers(); return; }
+    var sr = e.target.closest("[data-setrole]");
+    if (sr) { if (window.MOTAuth) window.MOTAuth.setRole(sr.getAttribute("data-setrole")); return; }
+    if (e.target.closest("[data-uback]")) { showView("upload"); return; }
+    if (rm && !e.target.closest("#roleMenu") && !e.target.closest("#adminMenuBtn")) rm.remove();
+  });
+  document.addEventListener("mot:rolechange", function () {
+    applyPermissions();
+    var b = document.body;
+    if (b.classList.contains("in-knowledge")) { if (!can("kc")) showView("upload"); else if (window.MOTKnowledgeUI && window.MOTKnowledgeUI.refresh) window.MOTKnowledgeUI.refresh(); }
+    if (b.classList.contains("in-templates")) { if (!can("template")) showView("upload"); else if (window.MOTTemplatesUI) window.MOTTemplatesUI.open(); }
+    if (b.classList.contains("in-users")) { if (!can("users")) showView("upload"); else renderUsers(); }
+    updateDownloadLabel();
+  });
   var tr = document.getElementById("tplReplaceBtn");
   if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openTemplates(); });
 
@@ -1127,4 +1239,5 @@
   // init
   applyLang(lang);
   showView("upload", { noScroll: true });
+  applyPermissions();
 })();
