@@ -119,11 +119,17 @@
         embedding: embed(toks), sections: sectionScores(norm), tokens: topTokens(toks),
         indexedAt: new Date().toISOString()
       };
-      return global.MOTVectorStore.put(rec).then(function () { return rec; });
+      return global.MOTVectorStore.put(rec).then(function () { _dirty = true; return rec; });
     });
   }
+  /* In-memory vector cache: retrieval must NOT re-read the whole library on
+     every analysis. Invalidated whenever the library changes. */
+  var _vecCache = null, _dirty = true;
+  function invalidate() { _dirty = true; }
+
   function ensureIndex() {
     if (!global.MOTKnowledge || !global.MOTVectorStore) return Promise.resolve([]);
+    if (_vecCache && !_dirty) return Promise.resolve(_vecCache);
     return Promise.all([global.MOTKnowledge.list(), global.MOTVectorStore.all()]).then(function (r) {
       var books = r[0], vecs = r[1];
       var byId = {}; vecs.forEach(function (v) { byId[v.id] = v; });
@@ -133,7 +139,8 @@
       var stale = vecs.filter(function (v) { return !liveIds[v.id]; });
       return Promise.all(stale.map(function (v) { return global.MOTVectorStore.del(v.id); }))
         .then(function () { return sequential(todo, indexBook); })
-        .then(global.MOTVectorStore.all);
+        .then(function () { return global.MOTVectorStore.all(); })
+        .then(function (vecs) { _vecCache = vecs; _dirty = false; return vecs; });
     });
   }
   function reindexAll() {
@@ -151,7 +158,7 @@
     var qToks = tokenize(qNorm);
     var qVec = embed(qToks);
     var qSet = {}; qToks.forEach(function (t) { qSet[t] = 1; });
-    return ensureIndex().then(function () { return global.MOTVectorStore.all(); }).then(function (vecs) {
+    return ensureIndex().then(function (vecs) {
       var scored = vecs.map(function (v) {
         var sim = cosine(qVec, v.embedding);
         var overlap = (v.tokens || []).filter(function (t) { return qSet[t]; });
@@ -186,7 +193,7 @@
   }
 
   global.MOTRag = {
-    indexBook: indexBook, ensureIndex: ensureIndex, reindexAll: reindexAll,
+    indexBook: indexBook, ensureIndex: ensureIndex, reindexAll: reindexAll, invalidate: invalidate,
     search: search, analyze: analyze, status: status, SECTION_CODES: SECTION_CODES, DIM: DIM
   };
 })(window);

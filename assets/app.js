@@ -981,14 +981,19 @@
     var b = document.getElementById("downloadBtn"); if (!b) return;
     b.textContent = t((activeSample && activeSample.mode === "create") ? "btn.downloadnew" : "btn.download");
   }
+  /* Approved-template cache: avoid re-reading the template store (and its
+     blobs) on every generation. Invalidated by the Template Manager. */
+  var _tplBuf = null;
+  function invalidateTemplateCache() { _tplBuf = null; }
   function getCreateTemplateBuffer() {
-    if (window.MOTTemplates) {
-      return window.MOTTemplates.getCurrent().then(function (cur) {
-        if (cur && cur.hasFile && cur.fileBlob && cur.fileBlob.arrayBuffer) return cur.fileBlob.arrayBuffer();
-        return window.MOTTemplate.getActiveBuffer();
-      });
-    }
-    return window.MOTTemplate.getActiveBuffer();
+    if (_tplBuf) return Promise.resolve(_tplBuf.slice(0));
+    var fetchBuf = window.MOTTemplates
+      ? window.MOTTemplates.getCurrent().then(function (cur) {
+          if (cur && cur.hasFile && cur.fileBlob && cur.fileBlob.arrayBuffer) return cur.fileBlob.arrayBuffer();
+          return window.MOTTemplate.getActiveBuffer();
+        })
+      : window.MOTTemplate.getActiveBuffer();
+    return fetchBuf.then(function (buf) { _tplBuf = buf; return buf.slice(0); });
   }
   function buildProjectMap() {
     var pj = (activeSample && activeSample.project) || {};
@@ -1280,7 +1285,8 @@
   if (revBtn) revBtn.addEventListener("click", function (e) { e.preventDefault(); addComment(); });
 
   // Bridge for the Reference Knowledge Center module
-  window.MOTApp = { showView: showView, openKnowledge: openKnowledge, lang: function () { return lang; }, t: t };
+  window.MOTApp = { showView: showView, openKnowledge: openKnowledge, lang: function () { return lang; }, t: t,
+                    invalidateTemplateCache: invalidateTemplateCache };
 
   // init
   applyLang(lang);

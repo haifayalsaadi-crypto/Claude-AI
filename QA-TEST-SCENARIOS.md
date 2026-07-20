@@ -93,3 +93,30 @@ Scope: manual acceptance tests for the two workflows, the knowledge modules, exp
 - [ ] No unauthorized access (UI hidden + action-level guards).
 - [ ] Ministry-branded throughout (palette, logo, FS Albert Arabic, RTL).
 - [ ] Stable after deployment.
+
+---
+
+## Automated checks (headless suite)
+
+Run from `dtest/` with Node (jsdom + fake-indexeddb):
+
+| Check | Covers | Result |
+|---|---|---|
+| `audit.js` | dead element references, missing local assets, unknown `data-perm` values, **i18n coverage in AR + EN**, CSS (@font-face, Ministry font, responsive breakpoints, RTL logical properties, `.perm-hidden`) | clean |
+| `doctest.js` | Word engine: Create fills the approved template (0 `{{` left), Improve **preserves the original** and appends improvements, minimal RTL builder; all outputs open in Word | pass |
+| `perms.js` | role × permission matrix for all 5 roles, UI hiding, **direct-API bypass attempts blocked** | pass |
+| `smoke2.js` | end-to-end: Knowledge Center, Clause Library, Template Manager, RAG retrieval, RBAC, no regressions | pass |
+
+## Performance / stabilization notes
+
+- **Semantic search does not re-read the library.** Vectors are cached in memory and only rebuilt when the library changes (`MOTRag.invalidate()` on add/edit/replace/re-index/delete). `search()` reuses the indexed set instead of re-querying the vector store.
+- **Approved template is cached** in memory after first read; the Template Manager invalidates the cache whenever the current template changes (upload / set-current / rollback / replace).
+- **Library & clause search is debounced** (180 ms) so typing no longer re-queries IndexedDB per keystroke.
+- **Loading feedback** shown while Knowledge Center panels load; export buttons disable and show progress text while generating.
+- **Browser compatibility:** no optional-chaining/nullish syntax; `Blob.prototype.arrayBuffer` polyfill included for older Safari.
+
+## Known limitations (by design)
+
+- **Permissions are client-side only.** There is no backend, so the role can be changed locally by a determined user. The matrix lives in `assets/auth.js` and should be enforced server-side once an API exists.
+- **PDF export** rasterises the report (html2canvas) to guarantee correct Arabic shaping; text is not selectable in the PDF.
+- **Improve on a PDF upload** produces a new improved Word file rather than editing the PDF in place (preserving a PDF's layout as Word is not possible client-side). DOCX uploads are preserved exactly.

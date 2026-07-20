@@ -16,7 +16,7 @@
 
   var K = {
     en: {
-      title: "Reference Knowledge Center",
+      title: "Reference Knowledge Center", loading: "Loading…",
       subtitle: "Manage the Ministry's reference specification books — the knowledge source used by the AI in later phases. This library is not the output template.",
       back: "← Back to workspace",
       nav_overview: "Overview", nav_books: "Reference Books", nav_categories: "Categories",
@@ -69,7 +69,7 @@
       ccat: { kpi: "KPIs", sla: "SLA", governance: "Governance", cyber: "Cybersecurity", deliverables: "Deliverables", acceptance: "Acceptance Criteria", risks: "Risks", dependencies: "Dependencies", support: "Support Requirements", cloud: "Cloud Requirements", hosting: "Hosting Requirements", reporting: "Reporting Requirements", payment: "Payment Terms", evaluation: "Evaluation Criteria" }
     },
     ar: {
-      title: "مركز المعرفة المرجعية",
+      title: "مركز المعرفة المرجعية", loading: "جارٍ التحميل…",
       subtitle: "إدارة الكراسات المرجعية للوزارة — مصدر المعرفة الذي يستخدمه الذكاء الاصطناعي في المراحل اللاحقة. هذه المكتبة ليست قالب المخرجات.",
       back: "→ العودة إلى مساحة العمل",
       nav_overview: "نظرة عامة", nav_books: "الكراسات المرجعية", nav_categories: "التصنيفات",
@@ -175,6 +175,7 @@
 
   function renderBody() {
     var body = document.getElementById("kc-body"); if (!body) return;
+    body.innerHTML = '<p class="kc-loading">' + esc(t("loading")) + "</p>";
     var map = { overview: renderOverview, books: renderBooks, clauses: renderClauses, categories: renderCategories, upload: renderUpload, analytics: renderAnalytics, details: renderDetails };
     (map[state.sub] || renderOverview)(body);
   }
@@ -547,7 +548,7 @@
         case "archive": MOTKnowledge.setStatus(idv, "archived").then(function () { toast(t("archived_ok")); renderBody(); }); break;
         case "unarchive": MOTKnowledge.setStatus(idv, "active").then(function () { toast(t("restored_ok")); renderBody(); }); break;
         case "replace": state.replaceId = idv; document.getElementById("kcReplaceInput").click(); break;
-        case "delete": if (global.confirm(t("del_confirm"))) MOTKnowledge.remove(idv).then(function () { toast(t("deleted_ok")); if (state.sub === "details") setSub("books"); else renderBody(); }); break;
+        case "delete": if (global.confirm(t("del_confirm"))) MOTKnowledge.remove(idv).then(function () { if (global.MOTRag && global.MOTRag.invalidate) global.MOTRag.invalidate(); toast(t("deleted_ok")); if (state.sub === "details") setSub("books"); else renderBody(); }); break;
       }
     });
   }
@@ -575,9 +576,18 @@
   });
   function closeMenus() { Array.prototype.forEach.call(document.querySelectorAll(".kc-menu.open"), function (m) { m.classList.remove("open"); }); }
 
+  // Debounced search: avoid re-querying the store on every keystroke
+  var _searchT;
   document.addEventListener("input", function (e) {
-    if (e.target.id === "kcSearch") { state.q = e.target.value; renderBooks(document.getElementById("kc-body")); focusEnd("kcSearch"); }
-    if (e.target.id === "clSearch") { state.clQ = e.target.value; renderClauses(document.getElementById("kc-body")); focusEnd("clSearch"); }
+    var isBooks = e.target.id === "kcSearch", isClauses = e.target.id === "clSearch";
+    if (!isBooks && !isClauses) return;
+    if (isBooks) state.q = e.target.value; else state.clQ = e.target.value;
+    clearTimeout(_searchT);
+    _searchT = setTimeout(function () {
+      var body = document.getElementById("kc-body"); if (!body) return;
+      if (isBooks) { renderBooks(body); focusEnd("kcSearch"); }
+      else { renderClauses(body); focusEnd("clSearch"); }
+    }, 180);
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "kcFilterCat") { state.filterCat = e.target.value; renderBooks(document.getElementById("kc-body")); }

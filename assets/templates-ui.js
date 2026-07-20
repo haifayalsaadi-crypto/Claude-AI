@@ -106,6 +106,8 @@
 
   function render() {
     var root = document.getElementById("view-templates"); if (!root) return;
+    // the approved template may have changed (set-current / replace / upload / rollback)
+    if (global.MOTApp && global.MOTApp.invalidateTemplateCache) global.MOTApp.invalidateTemplateCache();
     Promise.all([MOTTemplates.list(), MOTTemplates.getCurrent()]).then(function (r) {
       var rows = r[0], cur = r[1];
       var rollbackTarget = rows.filter(function (x) { return !x.isCurrent; })[0];
