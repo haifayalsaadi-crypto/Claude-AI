@@ -62,6 +62,8 @@
       "mode.create": "Create New Specification Book",
       "mode.createD": "Generate a brand-new specification from the approved template and the Ministry reference library.",
       "mode.select": "Select →", "mode.hint": "Select an operation mode above to begin.",
+      "mode.none": "Your role has read-only access — no workflow can be started. Contact your administrator.",
+      "rag.loading": "Retrieving relevant references…",
       "create.eyebrow": "Create new", "create.title": "Create a new specification book",
       "create.sub": "Generate a new Ministry specification from the approved template and the reference library.",
       "create.name": "Specification title", "create.namePh": "e.g. Managed Cloud Services",
@@ -86,6 +88,8 @@
       "rag.nomiss": "No missing required sections detected — the document covers the essentials.", "rag.nosug": "No additional suggestions.",
       "rag.reasonPre": "Selected for strong coverage of:", "rag.reasonGeneral": "general relevance", "rag.terms": "shared terms",
       "rag.addstr": "Add or strengthen", "rag.guided": "guided by",
+      "rev.title": "Review comments", "rev.ph": "Add a review comment…", "rev.add": "Add comment",
+      "rev.empty": "No review comments yet.", "rev.added": "Comment added.",
       "sect.scope": "Scope", "sect.objectives": "Objectives", "sect.deliverables": "Deliverables", "sect.kpis": "KPIs",
       "sect.acceptance": "Acceptance Criteria", "sect.governance": "Governance", "sect.cyber": "Cybersecurity", "sect.sla": "SLA",
       "sect.risks": "Risks", "sect.dependencies": "Dependencies", "sect.pricing": "Pricing", "sect.technical": "Technical Requirements",
@@ -245,6 +249,8 @@
       "mode.create": "إنشاء كراسة مواصفات جديدة",
       "mode.createD": "أنشئ كراسة جديدة كليًا من القالب المعتمد ومكتبة الوزارة المرجعية.",
       "mode.select": "اختيار ←", "mode.hint": "اختر وضع التشغيل بالأعلى للبدء.",
+      "mode.none": "دورك للاطّلاع فقط — لا يمكن بدء أي مسار عمل. تواصل مع مدير النظام.",
+      "rag.loading": "جارٍ استرجاع المراجع ذات الصلة…",
       "create.eyebrow": "إنشاء جديد", "create.title": "إنشاء كراسة مواصفات جديدة",
       "create.sub": "أنشئ كراسة مواصفات جديدة من القالب المعتمد والمكتبة المرجعية.",
       "create.name": "عنوان الكراسة", "create.namePh": "مثال: خدمات سحابية مُدارة",
@@ -269,6 +275,8 @@
       "rag.nomiss": "لا توجد أقسام مطلوبة مفقودة — المستند يغطي الأساسيات.", "rag.nosug": "لا توجد اقتراحات إضافية.",
       "rag.reasonPre": "اختير لتغطيته القوية لـ:", "rag.reasonGeneral": "صلة عامة", "rag.terms": "مصطلحات مشتركة",
       "rag.addstr": "أضف أو عزّز", "rag.guided": "بالاسترشاد بـ",
+      "rev.title": "ملاحظات المراجعة", "rev.ph": "أضف ملاحظة مراجعة…", "rev.add": "إضافة ملاحظة",
+      "rev.empty": "لا توجد ملاحظات مراجعة بعد.", "rev.added": "تمت إضافة الملاحظة.",
       "sect.scope": "نطاق العمل", "sect.objectives": "الأهداف", "sect.deliverables": "المخرجات", "sect.kpis": "مؤشرات الأداء",
       "sect.acceptance": "معايير القبول", "sect.governance": "الحوكمة", "sect.cyber": "الأمن السيبراني", "sect.sla": "اتفاقية مستوى الخدمة",
       "sect.risks": "المخاطر", "sect.dependencies": "الاعتماديات", "sect.pricing": "التسعير", "sect.technical": "المتطلبات الفنية",
@@ -536,7 +544,7 @@
     updateScoreTag(currentScore);
 
     buildCategories();
-    if (analysed) { buildFindings(currentFilter); buildDiff(); if (lastRag) renderRag(lastRag); }
+    if (analysed) { buildFindings(currentFilter); buildDiff(); if (lastRag) renderRag(lastRag); renderComments(); }
     updateFilterCounts();
     if (dashReady) updateDashboard();
     updateDownloadLabel();
@@ -667,6 +675,7 @@
     buildDiff();
     runRag();
     updateDownloadLabel();
+    renderComments();
     showResults("overview");
   }
 
@@ -692,6 +701,8 @@
   }
   function runRag() {
     if (!window.MOTRag) return;
+    var lw = document.getElementById("refList");
+    if (lw) lw.innerHTML = '<p class="muted">' + esc(t("rag.loading")) + "</p>";
     window.MOTRag.analyze(buildRagQuery(), { topK: 4 }).then(function (res) {
       lastRag = res; renderRag(res);
       var dr = document.getElementById("dashRefs"); if (dr) dr.textContent = String(res.references.length);
@@ -728,6 +739,37 @@
           }).join("") + "</ul>"
         : '<p class="muted">' + esc(t("rag.nosug")) + "</p>";
     }
+  }
+
+  /* ---------- Review comments (permission: comment) ---------- */
+  function commentsKey() {
+    var s = activeSample || SAMPLES.it;
+    return "mot_comments_" + ((s.name && (s.name.ar || s.name.en)) || "doc");
+  }
+  function readComments() {
+    try { return JSON.parse(localStorage.getItem(commentsKey()) || "[]"); } catch (e) { return []; }
+  }
+  function renderComments() {
+    var wrap = document.getElementById("revList"); if (!wrap) return;
+    var list = readComments();
+    wrap.innerHTML = list.length
+      ? list.slice().reverse().map(function (c) {
+          return '<div class="rev-item"><div class="rev-meta"><b>' + esc(c.role ? t("role." + c.role) : "") + "</b><span>" + esc(c.date) + "</span></div><p>" + esc(c.text) + "</p></div>";
+        }).join("")
+      : '<p class="muted">' + esc(t("rev.empty")) + "</p>";
+  }
+  function addComment() {
+    if (!can("comment")) { denied(); return; }
+    var inp = document.getElementById("revInput"); if (!inp) return;
+    var txt = (inp.value || "").trim(); if (!txt) return;
+    var role = window.MOTAuth ? window.MOTAuth.getRole() : "admin";
+    var list = readComments();
+    list.push({
+      text: txt, role: role,
+      date: new Date().toLocaleDateString(lang === "ar" ? "ar" : "en-GB", { year: "numeric", month: "short", day: "numeric", calendar: "gregory", numberingSystem: "latn" })
+    });
+    try { localStorage.setItem(commentsKey(), JSON.stringify(list)); } catch (e) {}
+    inp.value = ""; renderComments(); toast(t("rev.added"));
   }
 
   function updateScoreTag(score) {
@@ -1156,6 +1198,8 @@
       var ok = need.split("|").some(function (p) { return can(p.trim()); });
       el.classList.toggle("perm-hidden", !ok);
     });
+    var on = document.getElementById("opmodeNone");
+    if (on) on.hidden = (can("improve") || can("create"));
     updateRoleChip();
   }
   function updateRoleChip() {
@@ -1183,7 +1227,7 @@
     if (!can("users")) { denied(); return; }
     showView("users"); renderUsers();
   }
-  var PERM_LIST = ["upload", "download", "improve", "create", "kc", "book.add", "book.edit", "book.delete", "reindex", "clause", "clause.manage", "template", "tpl.upload", "tpl.replace", "reports", "settings", "users"];
+  var PERM_LIST = ["upload", "download", "improve", "create", "kc", "book.add", "book.edit", "book.delete", "reindex", "clause", "clause.manage", "template", "tpl.upload", "tpl.replace", "reports", "comment", "settings", "users"];
   function renderUsers() {
     var root = document.getElementById("view-users"); if (!root || !window.MOTAuth) return;
     var cur = window.MOTAuth.getRole();
@@ -1232,6 +1276,8 @@
   });
   var tr = document.getElementById("tplReplaceBtn");
   if (tr) tr.addEventListener("click", function (e) { e.preventDefault(); openTemplates(); });
+  var revBtn = document.getElementById("revAddBtn");
+  if (revBtn) revBtn.addEventListener("click", function (e) { e.preventDefault(); addComment(); });
 
   // Bridge for the Reference Knowledge Center module
   window.MOTApp = { showView: showView, openKnowledge: openKnowledge, lang: function () { return lang; }, t: t };

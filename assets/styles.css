@@ -634,6 +634,17 @@ body.in-templates .stepper-wrap{display:none}
 .rag-suglist li{background:#fff;border:1px solid var(--line);border-inline-start:4px solid var(--mid-green);border-radius:10px;padding:11px 14px;font-size:13.5px;box-shadow:var(--shadow-sm);line-height:1.5}
 .rag-suglist li b{color:var(--dark-green)}
 
+/* Review comments (permission: comment) */
+.rev-comments{margin-top:28px}
+.rev-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.rev-item{background:#fff;border:1px solid var(--line);border-inline-start:4px solid var(--aqua);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow-sm)}
+.rev-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px;font-size:12px;color:var(--grey)}
+.rev-meta b{color:var(--dark-green)}
+.rev-item p{font-size:13.5px;line-height:1.55;color:#33433f;margin:0}
+.rev-add{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.rev-add textarea{flex:1;min-width:220px;font-family:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;outline:none;resize:vertical}
+.rev-add textarea:focus{border-color:var(--aqua)}
+
 /* Create-New project form (expanded) */
 .create-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .create-form .cf-wide{grid-column:1 / -1}
@@ -660,3 +671,5 @@ body.in-users .stepper-wrap{display:none}
 .uperm-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .uperm{font-family:"Consolas","Courier New",monospace;font-size:11px;color:var(--grey);background:var(--soft);border:1px solid var(--line);padding:3px 8px;border-radius:6px;direction:ltr;unicode-bidi:isolate;opacity:.45}
 .uperm.on{color:var(--mid-green);background:#e9f6ee;border-color:#cdeede;opacity:1}
+.opmode-none{text-align:center;background:#fff8e8;border:1px solid #ffe2ad;color:#8a5a00;border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.55;margin-top:8px}
+.opmode-none[hidden]{display:none}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Procurement Governance Platform · Ministry of Tourism</title>
 <meta name="description" content="AI-Powered Procurement Governance Platform — review and improve RFPs and procurement documents before tendering." />
-<meta name="x-build" content="rbac-v14" />
+<meta name="x-build" content="permissions-v16" />
 <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
@@ -112,6 +112,7 @@
            <span class="opcard-cta" data-i18n="mode.select">Select →</span>
          </button>
        </div>
+       <p class="opmode-none" id="opmodeNone" hidden data-i18n="mode.none">Your role has read-only access — no workflow can be started. Contact your administrator.</p>
      </section>
 
      <div class="workspace" data-mode="">
@@ -447,6 +448,15 @@
 
       <h3 class="section-title" data-i18n="cat.section">Findings by category</h3>
       <div class="cat-grid" id="catGrid"><!-- injected --></div>
+
+      <section class="rev-comments" data-perm="comment">
+        <h3 class="section-title" data-i18n="rev.title">Review comments</h3>
+        <div class="rev-list" id="revList"><!-- injected --></div>
+        <div class="rev-add">
+          <textarea id="revInput" rows="2" data-i18n-ph="rev.ph" placeholder="Add a review comment…"></textarea>
+          <button class="btn btn-primary btn-sm" id="revAddBtn" data-i18n="rev.add">Add comment</button>
+        </div>
+      </section>
       </div><!-- /tab-overview -->
 
       <div class="tabpanel" id="tab-improvements" role="tabpanel">
