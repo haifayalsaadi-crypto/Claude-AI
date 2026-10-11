@@ -1,5 +1,5 @@
 /* =====================================================================
-   Ministry of Tourism — Reference Knowledge Center (storage layer)
+   Procurement Governance Platform — Reference Knowledge Center (storage layer)
    ---------------------------------------------------------------------
    Client-side storage & management for REFERENCE specification books.
    This is a KNOWLEDGE SOURCE only — NOT the output template.
@@ -296,12 +296,12 @@
     return tAll().then(function (rows) {
       if (rows && rows.length) return rows;
       var fetchBuf = (typeof fetch === "function")
-        ? fetch("assets/templates/ministry-sow-template.docx").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).catch(function () { return null; })
+        ? fetch("assets/templates/approved-sow-template.docx").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).catch(function () { return null; })
         : Promise.resolve(null);
       return fetchBuf.then(function (buf) {
         var ph = buf ? parsePH(buf) : [];
         var blob = buf ? new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }) : null;
-        var base = { name: "قالب المواصفات المعتمد", docType: "sow", department: "procurement", language: "ar", fileName: "ministry-sow-template.docx" };
+        var base = { name: "قالب المواصفات المعتمد", docType: "sow", department: "procurement", language: "ar", fileName: "approved-sow-template.docx" };
         var recs = [
           Object.assign({}, base, { id: tid(), version: "V1", status: "archived", isCurrent: false, notes: "الإصدار الأول", uploadDate: daysAgo(160), hasFile: false, fileBlob: null, placeholders: ph }),
           Object.assign({}, base, { id: tid(), version: "V2", status: "archived", isCurrent: false, notes: "تحديث التنسيق والهوية", uploadDate: daysAgo(70), hasFile: !!blob, fileBlob: blob, placeholders: ph }),

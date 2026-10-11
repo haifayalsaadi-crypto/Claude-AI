@@ -1,5 +1,5 @@
 /* =====================================================================
-   Ministry of Tourism — Roles & Permissions (RBAC)
+   Procurement Governance Platform — Roles & Permissions (RBAC)
    ---------------------------------------------------------------------
    Client-side authorization enforced at TWO levels:
    - UI: elements with data-perm are hidden when the role lacks it, and

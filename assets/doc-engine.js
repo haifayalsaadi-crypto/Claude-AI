@@ -1,5 +1,5 @@
 /* =====================================================================
-   Ministry of Tourism — Document Engine
+   Procurement Governance Platform — Document Engine
    ---------------------------------------------------------------------
    Two strictly separate outputs:
    - IMPROVE: edit the SAME uploaded .docx (append AI improvements to the

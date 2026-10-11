@@ -1,5 +1,5 @@
 /* =====================================================================
-   Ministry of Tourism — AI Knowledge Engine (Retrieval-Augmented)
+   Procurement Governance Platform — AI Knowledge Engine (Retrieval-Augmented)
    ---------------------------------------------------------------------
    Fully client-side RAG retrieval (no external API):
    - Parses reference books and segments them into standard sections.

@@ -1,5 +1,5 @@
 /* =====================================================================
-   Ministry of Tourism — Approved Word Template Engine
+   Procurement Governance Platform — Approved Word Template Engine
    ---------------------------------------------------------------------
    A reusable, extensible template engine for the procurement platform.
    - Persists ONE approved Ministry .docx template in IndexedDB.
@@ -16,7 +16,7 @@
   var STORE = "templates";
   var KEY = "approved";
   var DB_VERSION = 1;
-  var DEFAULT_TEMPLATE_URL = "assets/templates/ministry-sow-template.docx";
+  var DEFAULT_TEMPLATE_URL = "assets/templates/approved-sow-template.docx";
   var DELIMS = { start: "{{", end: "}}" };
   var PLACEHOLDER_RE = /\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g;
 
@@ -131,7 +131,7 @@
       }
       // default template placeholders
       return fetchDefaultBuffer().then(function (buf) {
-        return { source: "default", name: "ministry-sow-template.docx", placeholders: parsePlaceholders(buf), savedAt: null };
+        return { source: "default", name: "approved-sow-template.docx", placeholders: parsePlaceholders(buf), savedAt: null };
       });
     });
   }
