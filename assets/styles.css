@@ -64,8 +64,6 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible,.upload-card:focus
 .topbar{background:var(--dark-green);color:#fff}
 .topbar-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:66px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:15px;min-width:0}
-.brand-logo{height:33px;width:auto;display:block;flex:0 0 auto}
-.brand-divider{width:1px;height:26px;background:rgba(255,255,255,.25);flex:0 0 auto}
 .brand-title{font-size:15.5px;font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topbar-right{display:flex;align-items:center;gap:14px;flex:0 0 auto}
 .lang-toggle{font-size:13px;font-weight:700;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.4);padding:7px 14px;border-radius:999px;cursor:pointer;transition:.15s}

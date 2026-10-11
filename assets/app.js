@@ -1072,7 +1072,6 @@
     w.style.cssText = "position:fixed;top:0;left:-11000px;width:794px;background:#fff;font-family:'FS Albert Arabic','Segoe UI',sans-serif;color:#1f2d2c;direction:" + dir + ";";
     w.innerHTML =
       '<div style="background:#003232;color:#fff;padding:26px 34px;display:flex;align-items:center;gap:18px">'
-      + '<img src="assets/logo-white.svg" style="height:40px;width:auto">'
       + '<div style="flex:1"><div style="font-size:22px;font-weight:700">' + t("rpt.title") + '</div>'
       + '<div style="font-size:13px;opacity:.85">' + name + ' · ' + today + '</div></div></div>'
       + '<div style="padding:28px 34px">'
